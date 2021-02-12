@@ -81,8 +81,8 @@ public class AnswerButtonFrag extends Fragment
         public void onClick(View v)
         {
             QuizQuestions quiz = (QuizQuestions) getActivity();
-            //quiz.spawnAnswerValidityFrag(); //when clicked spawn the answervalidity fragment instead of the AnswerButton frag
-            //quiz.setTextForAnswerValidity(quiz.textForAnswerValidity);
+            quiz.spawnAnswerValidityFrag(); //when clicked spawn the answervalidity fragment instead of the AnswerButton frag
+            quiz.setTextForAnswerValidity(quiz.textForAnswerValidity);
         }
     }
 }

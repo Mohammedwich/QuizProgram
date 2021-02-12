@@ -83,7 +83,7 @@ public class AnswerValidityFrag extends Fragment
         public void onClick(View v)
         {
             QuizQuestions quiz = (QuizQuestions) getActivity();
-            //quiz.spawnAnswerButtonFrag(); //when clicked, respawn the Answer button fragment
+            quiz.spawnAnswerButtonFrag(); //when clicked, respawn the Answer button fragment
         }
     }
 

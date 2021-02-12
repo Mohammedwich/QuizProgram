@@ -1,6 +1,8 @@
 package com.example.quizprogram;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.content.Intent;
 import android.graphics.Color;
@@ -14,6 +16,9 @@ import java.util.Arrays;
 
 public class QuizQuestions extends AppCompatActivity
 {
+    boolean fragNull = true;
+    String textForAnswerValidity = "...";
+
     Serializable serializedQuiz;
     Quiz selectedQuiz;
     ArrayList<String[]> allQuestions;
@@ -54,6 +59,8 @@ public class QuizQuestions extends AppCompatActivity
         choice3.setText(currentQuestion[3]);
         choice4.setText(currentQuestion[4]);
         correctChoice = currentQuestion[5];
+
+        //spawnAnswerButtonFrag();
     }
 
 
@@ -67,6 +74,8 @@ public class QuizQuestions extends AppCompatActivity
             choice2.setBackgroundColor(Color.parseColor("#ffffff")); //set white
             choice3.setBackgroundColor(Color.parseColor("#ffffff"));
             choice4.setBackgroundColor(Color.parseColor("#ffffff"));
+
+            checkAnswerAndGenerateResponse((TextView)view, correctChoice);
         }
         else if (view == choice2)
         {
@@ -75,6 +84,8 @@ public class QuizQuestions extends AppCompatActivity
             choice2.setBackgroundColor(Color.parseColor("#1cd9ff"));
             choice3.setBackgroundColor(Color.parseColor("#ffffff"));
             choice4.setBackgroundColor(Color.parseColor("#ffffff"));
+
+            checkAnswerAndGenerateResponse((TextView)view, correctChoice);
         }
         else if (view == choice3)
         {
@@ -83,6 +94,8 @@ public class QuizQuestions extends AppCompatActivity
             choice2.setBackgroundColor(Color.parseColor("#ffffff"));
             choice3.setBackgroundColor(Color.parseColor("#1cd9ff"));
             choice4.setBackgroundColor(Color.parseColor("#ffffff"));
+
+            checkAnswerAndGenerateResponse((TextView)view, correctChoice);
         }
         else if (view == choice4)
         {
@@ -91,11 +104,70 @@ public class QuizQuestions extends AppCompatActivity
             choice2.setBackgroundColor(Color.parseColor("#ffffff"));
             choice3.setBackgroundColor(Color.parseColor("#ffffff"));
             choice4.setBackgroundColor(Color.parseColor("#1cd9ff"));
+
+            checkAnswerAndGenerateResponse((TextView)view, correctChoice);
         }
         else
         {
             System.out.println("Error: Clicked view is not equivalent to the choice variables");
         }
+    }
+
+    public void setTextForAnswerValidity(String str)
+    {
+        textForAnswerValidity = str;
+    }
+
+    //sets the text that will be used for FragmentAnswerValidity
+    public void checkAnswerAndGenerateResponse(TextView view, String correctAnswer)
+    {
+        if(view.getText().equals(correctAnswer) == true)
+        {
+            setTextForAnswerValidity("Correct");
+        }
+        else
+        {
+            setTextForAnswerValidity("Incorrect. The correct answer is: " + correctChoice);
+        }
+    }
+
+    public void spawnAnswerButtonFrag()
+    {
+        if(fragNull == false)
+        {
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            // Check to see if the validity fragment is already showing
+            AnswerValidityFrag answerValidityFrag = (AnswerValidityFrag) fragmentManager.findFragmentById(R.id.AnswerValidity);
+            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+            fragmentTransaction.remove(answerValidityFrag).commit();
+        }
+        AnswerButtonFrag answerButtonFrag = AnswerButtonFrag.newInstance("", "");
+        //answerButtonFrag.setValue(answerButtonText);
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.add(R.id.AnswerButton, answerButtonFrag).addToBackStack(null).commit();
+        //TODO: should I use the ID of the fragment in the Quiz activity xml?
+
+        fragNull = false;
+    }
+
+    public void spawnAnswerValidityFrag()
+    {
+        if(fragNull == false)
+        {
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            // Check to see if the Answer button fragment is already showing
+            AnswerButtonFrag answerButtonFrag = (AnswerButtonFrag) fragmentManager.findFragmentById(R.id.AnswerButton);
+            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+            fragmentTransaction.remove(answerButtonFrag).commit();
+        }
+        AnswerValidityFrag answerValidityFrag = AnswerValidityFrag.newInstance("", "");
+        answerValidityFrag.setValue(textForAnswerValidity);
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.add(R.id.AnswerValidity, answerValidityFrag).addToBackStack(null).commit();
+
+        fragNull = false;
     }
 
     public void runTest2ndScreen(View view)
@@ -105,4 +177,6 @@ public class QuizQuestions extends AppCompatActivity
             System.out.println(Arrays.toString(x));
         }
     }
+
+
 }
