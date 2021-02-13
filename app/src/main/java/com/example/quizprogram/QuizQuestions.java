@@ -34,6 +34,8 @@ public class QuizQuestions extends AppCompatActivity
     TextView choice4;
     String correctChoice;
 
+    String playerName;
+
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -49,6 +51,8 @@ public class QuizQuestions extends AppCompatActivity
         Intent theIntent = getIntent();
         serializedQuiz = theIntent.getSerializableExtra("chosenQuiz");
         selectedQuiz = (Quiz) serializedQuiz;
+
+        playerName = theIntent.getStringExtra("playerName");
 
         allQuestions = selectedQuiz.getListOfQuestions();
         currentQuestion = allQuestions.get(0);
@@ -174,10 +178,13 @@ public class QuizQuestions extends AppCompatActivity
 
     public void runTest2ndScreen(View view)
     {
+        System.out.println(playerName);
+        /*
         for (String[] x : allQuestions)
         {
             System.out.println(Arrays.toString(x));
         }
+         */
     }
 
 

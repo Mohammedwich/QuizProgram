@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import java.io.File;
@@ -19,6 +20,7 @@ import java.util.Scanner;
 
 public class MainActivity extends AppCompatActivity
 {
+    EditText playerNameEditText;
     String selectedQuiz = "";
     File theFileDir;
     File[] arrayOfQuizFiles; //Hold the quiz files after filtering directory
@@ -34,6 +36,8 @@ public class MainActivity extends AppCompatActivity
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        playerNameEditText = findViewById(R.id.PlayerName);
 
         //TODO: Manually assignming quiz titles now. Change to listview later.
         quiz1 = findViewById(R.id.Quiz1);
@@ -196,6 +200,9 @@ public class MainActivity extends AppCompatActivity
             // put the quiz in the intent
             intentObject.putExtra("chosenQuiz", quizToLoad);
 
+            String theName = playerNameEditText.getText().toString();
+            intentObject.putExtra("playerName", theName);
+
             startActivity(intentObject); //Go to next screen
         }
 
@@ -207,6 +214,6 @@ public class MainActivity extends AppCompatActivity
 
     public void runTest(View view)
     {
-        System.out.println("File names: " + listOfQuizzes);
+        System.out.println(playerNameEditText.getText());
     }
 }
