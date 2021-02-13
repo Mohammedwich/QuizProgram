@@ -60,7 +60,7 @@ public class QuizQuestions extends AppCompatActivity
         choice4.setText(currentQuestion[4]);
         correctChoice = currentQuestion[5];
 
-        //spawnAnswerButtonFrag();
+        spawnAnswerButtonFrag();
     }
 
 
@@ -127,12 +127,13 @@ public class QuizQuestions extends AppCompatActivity
         }
         else
         {
-            setTextForAnswerValidity("Incorrect. The correct answer is: " + correctChoice);
+            setTextForAnswerValidity("Incorrect.\nThe correct answer is: " + correctChoice);
         }
     }
 
     public void spawnAnswerButtonFrag()
     {
+        /* //This section of code causes a crash. Replacing works fine without delete then replace/add
         if(fragNull == false)
         {
             FragmentManager fragmentManager = getSupportFragmentManager();
@@ -140,12 +141,12 @@ public class QuizQuestions extends AppCompatActivity
             AnswerValidityFrag answerValidityFrag = (AnswerValidityFrag) fragmentManager.findFragmentById(R.id.AnswerValidity);
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
             fragmentTransaction.remove(answerValidityFrag).commit();
-        }
+        }*/
         AnswerButtonFrag answerButtonFrag = AnswerButtonFrag.newInstance("", "");
         //answerButtonFrag.setValue(answerButtonText);
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.add(R.id.AnswerButton, answerButtonFrag).addToBackStack(null).commit();
+        fragmentTransaction.replace(R.id.FragmentFrameID, answerButtonFrag).addToBackStack(null).commit();
         //TODO: should I use the ID of the fragment in the Quiz activity xml?
 
         fragNull = false;
@@ -153,6 +154,7 @@ public class QuizQuestions extends AppCompatActivity
 
     public void spawnAnswerValidityFrag()
     {
+        /* //This section of code causes a crash. Replacing works fine without delete then replace/add
         if(fragNull == false)
         {
             FragmentManager fragmentManager = getSupportFragmentManager();
@@ -160,12 +162,12 @@ public class QuizQuestions extends AppCompatActivity
             AnswerButtonFrag answerButtonFrag = (AnswerButtonFrag) fragmentManager.findFragmentById(R.id.AnswerButton);
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
             fragmentTransaction.remove(answerButtonFrag).commit();
-        }
+        }*/
         AnswerValidityFrag answerValidityFrag = AnswerValidityFrag.newInstance("", "");
         answerValidityFrag.setValue(textForAnswerValidity);
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.add(R.id.AnswerValidity, answerValidityFrag).addToBackStack(null).commit();
+        fragmentTransaction.replace(R.id.FragmentFrameID, answerValidityFrag).addToBackStack(null).commit();
 
         fragNull = false;
     }

@@ -76,21 +76,12 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/Question" />
 
-    <fragment
-        android:name="com.example.quizprogram.AnswerButtonFrag"
-        android:id="@+id/AnswerButton_fragmentID"
+    <FrameLayout
+        android:name="com.example.quizprogram.FragmentFrame"
+        android:id="@+id/FragmentFrameID"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toBottomOf="@id/TestButton2"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"/>
-
-    <fragment
-        android:name="com.example.quizprogram.AnswerValidityFrag"
-        android:id="@+id/AnswerValidity_fragmentID"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/AnswerButton_fragmentID"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"/>
 
