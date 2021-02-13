@@ -12,7 +12,6 @@ import android.widget.TextView;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 public class QuizQuestions extends AppCompatActivity
 {
@@ -23,9 +22,12 @@ public class QuizQuestions extends AppCompatActivity
     Quiz selectedQuiz;
     ArrayList<String[]> allQuestions;
     String [] currentQuestion;
+    int currentQuestionIndex = 0;
 
-    int currentlySelectedChoice = 0;
-    boolean isQuizComplete = false; //make true when questions run out so result screen is displayed
+    String currentlySelectedChoice = "...";
+    int questionsAnswered = 0;
+    int questionsAnsweredCorrectly = 0;
+    boolean quizComplete = false; //make true when questions run out so result screen is displayed
 
     TextView question;
     TextView choice1;
@@ -55,7 +57,7 @@ public class QuizQuestions extends AppCompatActivity
         playerName = theIntent.getStringExtra("playerName");
 
         allQuestions = selectedQuiz.getListOfQuestions();
-        currentQuestion = allQuestions.get(0);
+        currentQuestion = allQuestions.get(currentQuestionIndex);
 
         question.setText(currentQuestion[0]);
         choice1.setText(currentQuestion[1]);
@@ -73,7 +75,7 @@ public class QuizQuestions extends AppCompatActivity
     {
         if (view == choice1)
         {
-            currentlySelectedChoice = 1;
+            currentlySelectedChoice = choice1.getText().toString();
             choice1.setBackgroundColor(Color.parseColor("#1cd9ff")); //set blue
             choice2.setBackgroundColor(Color.parseColor("#ffffff")); //set white
             choice3.setBackgroundColor(Color.parseColor("#ffffff"));
@@ -83,7 +85,7 @@ public class QuizQuestions extends AppCompatActivity
         }
         else if (view == choice2)
         {
-            currentlySelectedChoice = 2;
+            currentlySelectedChoice = choice2.getText().toString();
             choice1.setBackgroundColor(Color.parseColor("#ffffff"));
             choice2.setBackgroundColor(Color.parseColor("#1cd9ff"));
             choice3.setBackgroundColor(Color.parseColor("#ffffff"));
@@ -93,7 +95,7 @@ public class QuizQuestions extends AppCompatActivity
         }
         else if (view == choice3)
         {
-            currentlySelectedChoice = 3;
+            currentlySelectedChoice = choice3.getText().toString();
             choice1.setBackgroundColor(Color.parseColor("#ffffff"));
             choice2.setBackgroundColor(Color.parseColor("#ffffff"));
             choice3.setBackgroundColor(Color.parseColor("#1cd9ff"));
@@ -103,7 +105,7 @@ public class QuizQuestions extends AppCompatActivity
         }
         else if (view == choice4)
         {
-            currentlySelectedChoice = 4;
+            currentlySelectedChoice = choice4.getText().toString();
             choice1.setBackgroundColor(Color.parseColor("#ffffff"));
             choice2.setBackgroundColor(Color.parseColor("#ffffff"));
             choice3.setBackgroundColor(Color.parseColor("#ffffff"));
@@ -115,6 +117,58 @@ public class QuizQuestions extends AppCompatActivity
         {
             System.out.println("Error: Clicked view is not equivalent to the choice variables");
         }
+    }
+
+    //Clicking the answer validation fragment will call this
+    public void incrementQuestionsAnswered()
+    {
+        ++questionsAnswered;
+
+        if(questionsAnswered == allQuestions.size())
+        {
+            quizComplete = true;
+        }
+    }
+
+    //Clicking the answer validation fragment will call this
+    public boolean isQuizComplete()
+    {
+        return quizComplete;
+    }
+
+    //Clicking the answer validation fragment might call this
+    public void incrementCorrectAnswerCount()
+    {
+        ++questionsAnsweredCorrectly;
+    }
+
+    //Clicking the answer validation fragment will call this
+    public boolean wasTheChoiceCorrect()
+    {
+        if(currentlySelectedChoice.equals(correctChoice) == true)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    //TODO: does screen have to be reloaded? Will I call a recyclerView method?
+    //Clicking the answer validation fragment will call this
+    //Set the next question to be displayed after the current one is answered
+    public void setNextQuestions()
+    {
+        ++currentQuestionIndex;
+        currentQuestion = allQuestions.get(currentQuestionIndex);
+
+        question.setText(currentQuestion[0]);
+        choice1.setText(currentQuestion[1]);
+        choice2.setText(currentQuestion[2]);
+        choice3.setText(currentQuestion[3]);
+        choice4.setText(currentQuestion[4]);
+        correctChoice = currentQuestion[5];
     }
 
     public void setTextForAnswerValidity(String str)
@@ -133,6 +187,18 @@ public class QuizQuestions extends AppCompatActivity
         {
             setTextForAnswerValidity("Incorrect.\nThe correct answer is: " + correctChoice);
         }
+    }
+
+    public void goToResultScreen()
+    {
+        Intent intentObject = new Intent(this, QuizResult.class);
+
+        //Pass these values so name and score can be displayed on result screen
+        intentObject.putExtra("playerName", playerName);
+        intentObject.putExtra("numOfCorrectAnswers", questionsAnsweredCorrectly);
+        intentObject.putExtra("numOfQuestions", allQuestions.size());
+
+        startActivity(intentObject); //Go to next screen
     }
 
     public void spawnAnswerButtonFrag()

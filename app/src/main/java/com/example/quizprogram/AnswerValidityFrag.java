@@ -26,7 +26,7 @@ public class AnswerValidityFrag extends Fragment
     private String mParam1;
     private String mParam2;
     private TextView answerValidityText;
-    String textString = "";
+    String textString = ""; //The string that is displayed on the fragment.
 
     public AnswerValidityFrag()
     {
@@ -83,6 +83,26 @@ public class AnswerValidityFrag extends Fragment
         public void onClick(View v)
         {
             QuizQuestions quiz = (QuizQuestions) getActivity();
+
+            quiz.incrementQuestionsAnswered();
+
+            if(quiz.wasTheChoiceCorrect() == true)
+            {
+                quiz.incrementCorrectAnswerCount();
+            }
+
+            if(quiz.isQuizComplete() == false)
+            {
+                //TODO: see about refreshing the question with recyclerview
+                quiz.setNextQuestions();
+            }
+
+            if(quiz.isQuizComplete() == true)
+            {
+                //TODO: call a function from quiz that takes user to result activity and passes the playerName and score to it
+                quiz.goToResultScreen();
+            }
+
             quiz.spawnAnswerButtonFrag(); //when clicked, respawn the Answer button fragment
         }
     }
