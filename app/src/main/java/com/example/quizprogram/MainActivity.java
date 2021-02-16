@@ -3,11 +3,14 @@
 package com.example.quizprogram;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -27,8 +30,7 @@ public class MainActivity extends AppCompatActivity
     ArrayList<Quiz> listOfQuizzes = new ArrayList<Quiz>();
     ArrayList<String> quizTitles = new ArrayList<String>();
 
-    TextView quiz1;
-    TextView quiz2;
+    RecyclerView aRecyclerView;
 
 
     @Override
@@ -38,10 +40,13 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
 
         playerNameEditText = findViewById(R.id.PlayerName);
+        aRecyclerView = findViewById(R.id.rvQuizTitlesID);
 
+        /*
         //TODO: Manually assignming quiz titles now. Change to listview later.
         quiz1 = findViewById(R.id.Quiz1);
         quiz2 = findViewById(R.id.Quiz2);
+        */
 
         theFileDir = getFilesDir();
 
@@ -79,8 +84,13 @@ public class MainActivity extends AppCompatActivity
             quizTitles.add(listOfQuizzes.get(indexOfCurrentQuiz).getQuizTitle());
         }
 
-        quiz1.setText(quizTitles.get(0));
-        quiz2.setText(quizTitles.get(1));
+        QuizTopicAdapter quizTopicAdapter = new QuizTopicAdapter(quizTitles);
+
+        aRecyclerView.setAdapter(quizTopicAdapter);
+        //layout managers lets us set a layout and control how it works like when to recycle and other stuff
+        aRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+
 
     } // onCreate end
 
