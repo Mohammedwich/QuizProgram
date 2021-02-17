@@ -169,6 +169,12 @@ public class QuizQuestions extends AppCompatActivity
         choice3.setText(currentQuestion[3]);
         choice4.setText(currentQuestion[4]);
         correctChoice = currentQuestion[5];
+
+        //make them all white so the previous question's selected answer view doesn't stay blue
+        choice1.setBackgroundColor(Color.parseColor("#ffffff"));
+        choice2.setBackgroundColor(Color.parseColor("#ffffff"));
+        choice3.setBackgroundColor(Color.parseColor("#ffffff"));
+        choice4.setBackgroundColor(Color.parseColor("#ffffff"));
     }
 
     public void setTextForAnswerValidity(String str)

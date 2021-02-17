@@ -1,5 +1,7 @@
 package com.example.quizprogram;
 
+import android.content.Context;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,23 +17,27 @@ public class QuizTopicAdapter extends RecyclerView.Adapter<QuizTopicAdapter.Topi
     public class TopicHolder extends RecyclerView.ViewHolder
     {
         public TextView textView;
+        public boolean isSelected;
 
         public TopicHolder(View view)
         {
             super(view);
 
             textView = view.findViewById(R.id.textViewQuizTitleID);
+            isSelected = false;
         }
     }
 
     //############################################################
 
     private ArrayList<String> listOfQuizTitles;
+    private Context mContext; //This will hold the main activity so the adapter can call functions defined inside it
 
     // Constructor takes an array of strings to be shown in list.
-    public QuizTopicAdapter(ArrayList<String> theList)
+    public QuizTopicAdapter(ArrayList<String> theList, Context theContext)
     {
         listOfQuizTitles = theList;
+        mContext = theContext;
     }
 
     @NonNull
@@ -52,6 +58,17 @@ public class QuizTopicAdapter extends RecyclerView.Adapter<QuizTopicAdapter.Topi
         //Slides note: mQuizname is likely an individual TextView that is supposed to display the one quiz's topic name
 
         holder.textView.setText(listOfQuizTitles.get(position));
+
+        holder.textView.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+
+                if (mContext instanceof MainActivity)
+                {
+                    ((MainActivity) mContext).selectQuiz(v);
+                }
+
+            }
+        });
     }
 
     @Override
@@ -61,5 +78,5 @@ public class QuizTopicAdapter extends RecyclerView.Adapter<QuizTopicAdapter.Topi
         return listOfQuizTitles == null ? 0 : listOfQuizTitles.size();
     }
 
-    
+
 }

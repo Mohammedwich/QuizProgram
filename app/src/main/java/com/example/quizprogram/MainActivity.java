@@ -84,7 +84,7 @@ public class MainActivity extends AppCompatActivity
             quizTitles.add(listOfQuizzes.get(indexOfCurrentQuiz).getQuizTitle());
         }
 
-        QuizTopicAdapter quizTopicAdapter = new QuizTopicAdapter(quizTitles);
+        QuizTopicAdapter quizTopicAdapter = new QuizTopicAdapter(quizTitles, this);
 
         aRecyclerView.setAdapter(quizTopicAdapter);
         //layout managers lets us set a layout and control how it works like when to recycle and other stuff
@@ -165,8 +165,12 @@ public class MainActivity extends AppCompatActivity
     }
 
 
-    //TODO: Temporary coloring & selection setup. Change after titles are made into a list.
-    //Save the selected quiz's name so when user clicks next, it knows which quiz questions to load
+    //Save the selected quiz's name so when user clicks next, it knows which quiz questions to load.
+    //Note: selected topic must be clicked again to unselect it and make background white again.
+    //  If multiple topics are clicked once each they will all become highlighted blue but the
+    //  last topic clicked will be the selected one for the next button.
+    //It is this way because I need a way to get all holders from a recycler view to be able to
+    //  make them all white when one is clicked. onClickItemListener doesn't exist for RecyclerViews
     public void selectQuiz(View view)
     {
         String quizName = ((TextView)view).getText().toString();
