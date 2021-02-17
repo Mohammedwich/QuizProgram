@@ -6,4 +6,36 @@
     android:layout_height="match_parent"
     tools:context=".QuizResult">
 
+    <TextView
+        android:id="@+id/playerGreetingID"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:padding="5dp"
+        android:text="Hello, name"
+        android:textSize="24sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <TextView
+        android:id="@+id/quizScoreID"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:padding="5dp"
+        android:text="Score / Score"
+        android:textSize="24sp"
+        app:layout_constraintTop_toBottomOf="@id/playerGreetingID"/>
+
+    <Button
+        android:id="@+id/returnToMainBtnID"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:text="Return to main screen"
+        android:textSize="24sp"
+        android:onClick="returnToMainScreen"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

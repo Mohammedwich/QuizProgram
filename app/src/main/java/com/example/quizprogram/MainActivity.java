@@ -116,19 +116,45 @@ public class MainActivity extends AppCompatActivity
             //Read 5 lines: A question and its 4 potential answers
             for(int i = 0; i < 5; i++)
             {
-                theQuestion = fileReader.nextLine();
-
-                //Empty lines will pass the while check but crash the app if the next 4 nextLine calls
-                // below hit an EOF, so if this first assignment is blank that means we are done.
-                if(theQuestion.equals(""))
+                //if any line reads end up having no line, the loop will be broken to prevent an exception
+                // Breaking will also make the current question not be added to the quiz.
+                if(fileReader.hasNextLine())
+                {
+                    theQuestion = fileReader.nextLine();
+                }
+                else
                 {
                     break;
                 }
 
-                choice1 = fileReader.nextLine();
-                choice2 = fileReader.nextLine();
-                choice3 = fileReader.nextLine();
-                choice4 = fileReader.nextLine();
+                if(fileReader.hasNextLine()) {
+                    choice1 = fileReader.nextLine();
+                }
+                else{
+                    break;
+                }
+
+                if(fileReader.hasNextLine()) {
+                    choice2 = fileReader.nextLine();
+                }
+                else{
+                    break;
+                }
+
+                if(fileReader.hasNextLine()) {
+                    choice3 = fileReader.nextLine();
+                }
+                else{
+                    break;
+                }
+
+                if(fileReader.hasNextLine()) {
+                    choice4 = fileReader.nextLine();
+                }
+                else{
+                    break;
+                }
+
 
                 if(choice1.startsWith("*"))
                 {
