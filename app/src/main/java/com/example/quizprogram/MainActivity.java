@@ -68,6 +68,12 @@ public class MainActivity extends AppCompatActivity
         //make the fileDir we got list its files, that pass the filter, in the array
         arrayOfQuizFiles = theFileDir.listFiles(theFilter);
 
+        //If there are no files, it will say so in the console.
+        if(arrayOfQuizFiles.length == 0)
+        {
+            System.out.println("No files found");
+        }
+
         //fill the list of quizzes with one quiz per file in arrayOfQuizFiles
         for(int indexOfCurrentFile = 0; indexOfCurrentFile < arrayOfQuizFiles.length; indexOfCurrentFile++)
         {
