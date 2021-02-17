@@ -5,7 +5,6 @@
     android:layout_height="wrap_content"
     tools:context=".AnswerButtonFrag">
 
-    <!-- TODO: Update blank fragment layout -->
     <Button
         android:id="@+id/AnswerButton"
         android:layout_width="match_parent"

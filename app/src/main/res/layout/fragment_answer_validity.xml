@@ -5,7 +5,6 @@
     android:layout_height="wrap_content"
     tools:context=".AnswerValidityFrag">
 
-    <!-- TODO: Update blank fragment layout -->
     <TextView
         android:id="@+id/AnswerValidity"
         android:layout_width="match_parent"

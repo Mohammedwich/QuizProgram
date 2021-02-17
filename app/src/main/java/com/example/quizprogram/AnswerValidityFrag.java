@@ -1,3 +1,12 @@
+//Written by Mohammed Ahmed, msa190000
+//For CS4301.002, assignment 2, started Feb 7 2021.
+//Description:
+//The app will load up some quizzes out of text files and then offer the choices to the user in a
+// RecyclerView. They enter their name and pick a quiz and click next and take the quiz on the next
+// screen. Select an answer and click the answer button which will display the result. Click the
+// button again to load the next question. When done they are greeted and told their result on a
+// third screen. From the third screen they can return to the first.
+
 package com.example.quizprogram;
 
 import android.os.Bundle;
@@ -82,6 +91,7 @@ public class AnswerValidityFrag extends Fragment
         @Override
         public void onClick(View v)
         {
+            //Do some checks and update values and see if user should to go to the result screen
             QuizQuestions quiz = (QuizQuestions) getActivity();
 
             quiz.incrementQuestionsAnswered();
@@ -93,13 +103,12 @@ public class AnswerValidityFrag extends Fragment
 
             if(quiz.isQuizComplete() == false)
             {
-                //TODO: see about refreshing the question with recyclerview
                 quiz.setNextQuestions();
             }
 
             if(quiz.isQuizComplete() == true)
             {
-                //TODO: call a function from quiz that takes user to result activity and passes the playerName and score to it
+                //call a function from QuizQuestions object quiz that takes user to result activity and passes the playerName and score to it
                 quiz.goToResultScreen();
             }
 
@@ -107,6 +116,7 @@ public class AnswerValidityFrag extends Fragment
         }
     }
 
+    //sets the text displayed in the fragment. ex: "correct" or "wrong..."
     public void setValue(String str)
     {
         textString = str;

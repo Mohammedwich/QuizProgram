@@ -39,13 +39,4 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.8" />
 
-    <Button
-        android:id="@+id/TestButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Test"
-        android:onClick="runTest"
-        app:layout_constraintTop_toBottomOf="@id/NextButton"
-        app:layout_constraintLeft_toLeftOf="@id/NextButton"/>
-
 </androidx.constraintlayout.widget.ConstraintLayout>

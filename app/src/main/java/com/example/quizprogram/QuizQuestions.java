@@ -1,3 +1,12 @@
+//Written by Mohammed Ahmed, msa190000
+//For CS4301.002, assignment 2, started Feb 7 2021.
+//Description:
+//The app will load up some quizzes out of text files and then offer the choices to the user in a
+// RecyclerView. They enter their name and pick a quiz and click next and take the quiz on the next
+// screen. Select an answer and click the answer button which will display the result. Click the
+// button again to load the next question. When done they are greeted and told their result on a
+// third screen. From the third screen they can return to the first.
+
 package com.example.quizprogram;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -13,6 +22,7 @@ import android.widget.TextView;
 import java.io.Serializable;
 import java.util.ArrayList;
 
+// This class is for second screen
 public class QuizQuestions extends AppCompatActivity
 {
     boolean fragNull = true;
@@ -155,7 +165,6 @@ public class QuizQuestions extends AppCompatActivity
         }
     }
 
-    //TODO: does screen have to be reloaded? Will I call a recyclerView method?
     //Clicking the answer validation fragment will call this
     //Set the next question to be displayed after the current one is answered
     public void setNextQuestions()
@@ -209,7 +218,9 @@ public class QuizQuestions extends AppCompatActivity
 
     public void spawnAnswerButtonFrag()
     {
-        /* //This section of code causes a crash. Replacing works fine without delete then replace/add
+        //This section of code causes a crash. Replacing works fine without delete then replace/add
+        // Left here for note purposes. Code from slides.
+        /*
         if(fragNull == false)
         {
             FragmentManager fragmentManager = getSupportFragmentManager();
@@ -219,45 +230,20 @@ public class QuizQuestions extends AppCompatActivity
             fragmentTransaction.remove(answerValidityFrag).commit();
         }*/
         AnswerButtonFrag answerButtonFrag = AnswerButtonFrag.newInstance("", "");
-        //answerButtonFrag.setValue(answerButtonText);
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.FragmentFrameID, answerButtonFrag).addToBackStack(null).commit();
-        //TODO: should I use the ID of the fragment in the Quiz activity xml?
-
-        fragNull = false;
     }
 
     public void spawnAnswerValidityFrag()
     {
-        /* //This section of code causes a crash. Replacing works fine without delete then replace/add
-        if(fragNull == false)
-        {
-            FragmentManager fragmentManager = getSupportFragmentManager();
-            // Check to see if the Answer button fragment is already showing
-            AnswerButtonFrag answerButtonFrag = (AnswerButtonFrag) fragmentManager.findFragmentById(R.id.AnswerButton);
-            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-            fragmentTransaction.remove(answerButtonFrag).commit();
-        }*/
+        // Note: Had similar commented out code block like the one in spawnAnswerbuttonFrag
+
         AnswerValidityFrag answerValidityFrag = AnswerValidityFrag.newInstance("", "");
         answerValidityFrag.setValue(textForAnswerValidity);
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.FragmentFrameID, answerValidityFrag).addToBackStack(null).commit();
-
-        fragNull = false;
     }
-
-    public void runTest2ndScreen(View view)
-    {
-        System.out.println(playerName);
-        /*
-        for (String[] x : allQuestions)
-        {
-            System.out.println(Arrays.toString(x));
-        }
-         */
-    }
-
 
 }

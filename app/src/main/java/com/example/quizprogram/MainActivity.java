@@ -1,4 +1,11 @@
-//TODO: Add comment headers in all files
+//Written by Mohammed Ahmed, msa190000
+//For CS4301.002, assignment 2, started Feb 7 2021.
+//Description:
+//The app will load up some quizzes out of text files and then offer the choices to the user in a
+// RecyclerView. They enter their name and pick a quiz and click next and take the quiz on the next
+// screen. Select an answer and click the answer button which will display the result. Click the
+// button again to load the next question. When done they are greeted and told their result on a
+// third screen. From the third screen they can return to the first.
 
 package com.example.quizprogram;
 
@@ -21,6 +28,7 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 
+// This class is for first screen
 public class MainActivity extends AppCompatActivity
 {
     EditText playerNameEditText;
@@ -41,12 +49,6 @@ public class MainActivity extends AppCompatActivity
 
         playerNameEditText = findViewById(R.id.PlayerName);
         aRecyclerView = findViewById(R.id.rvQuizTitlesID);
-
-        /*
-        //TODO: Manually assignming quiz titles now. Change to listview later.
-        quiz1 = findViewById(R.id.Quiz1);
-        quiz2 = findViewById(R.id.Quiz2);
-        */
 
         theFileDir = getFilesDir();
 
@@ -84,13 +86,14 @@ public class MainActivity extends AppCompatActivity
             quizTitles.add(listOfQuizzes.get(indexOfCurrentQuiz).getQuizTitle());
         }
 
+        //RecyclerView uses an adapter, which uses a holder class to display each view.
+        // View in holder, adapter spawns holders, Recyclerview displays them all.
         QuizTopicAdapter quizTopicAdapter = new QuizTopicAdapter(quizTitles, this);
 
         aRecyclerView.setAdapter(quizTopicAdapter);
+
         //layout managers lets us set a layout and control how it works like when to recycle and other stuff
         aRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-
-
 
     } // onCreate end
 
@@ -156,6 +159,7 @@ public class MainActivity extends AppCompatActivity
                 }
 
 
+                //set which answer is the correct one
                 if(choice1.startsWith("*"))
                 {
                     choice1 = choice1.replace("*", ""); //erase asterisk
@@ -181,6 +185,7 @@ public class MainActivity extends AppCompatActivity
                     System.out.println("Error: None of the choices are marked correct with an asterisk at the beginning");
                 }
 
+                //The quiz object holds multiple questions. Add one more question to it.
                 theQuiz.addQuestion(theQuestion, choice1, choice2, choice3, choice4, correctChoice);
 
             } //end of for loop, one question added to quiz per loop
@@ -230,10 +235,12 @@ public class MainActivity extends AppCompatActivity
                 }
             }
 
+            //In case something weird happens, print out this message
             if(quizToLoad.getQuizTitle().equals(""))
             {
                 System.out.println("Selected quiz does not match any available quizzes. Empty quiz passed to intent");
             }
+
 
             Intent intentObject = new Intent(this, QuizQuestions.class);
 
@@ -246,14 +253,6 @@ public class MainActivity extends AppCompatActivity
             startActivity(intentObject); //Go to next screen
         }
 
-
     }
 
-
-
-
-    public void runTest(View view)
-    {
-        System.out.println(playerNameEditText.getText());
-    }
 }

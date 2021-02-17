@@ -1,7 +1,15 @@
+//Written by Mohammed Ahmed, msa190000
+//For CS4301.002, assignment 2, started Feb 7 2021.
+//Description:
+//The app will load up some quizzes out of text files and then offer the choices to the user in a
+// RecyclerView. They enter their name and pick a quiz and click next and take the quiz on the next
+// screen. Select an answer and click the answer button which will display the result. Click the
+// button again to load the next question. When done they are greeted and told their result on a
+// third screen. From the third screen they can return to the first.
+
 package com.example.quizprogram;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,12 +20,14 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 
+//Note: This adapter expects to receive a MainActivity type object during construction. It is intended to work with the MainActivity class.
 public class QuizTopicAdapter extends RecyclerView.Adapter<QuizTopicAdapter.TopicHolder>
 {
+    //Each instance of the holder class will hold a view with quiz title in it
     public class TopicHolder extends RecyclerView.ViewHolder
     {
         public TextView textView;
-        public boolean isSelected;
+        public boolean isSelected; //for highlighting selected titles
 
         public TopicHolder(View view)
         {
@@ -47,7 +57,6 @@ public class QuizTopicAdapter extends RecyclerView.Adapter<QuizTopicAdapter.Topi
     {
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.quiz_title, parent, false);
         return new TopicHolder(v);
-
     }
 
     @Override
@@ -62,11 +71,12 @@ public class QuizTopicAdapter extends RecyclerView.Adapter<QuizTopicAdapter.Topi
         holder.textView.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
 
+                //Make sure mContext is the right object type then pass the view to selectQuiz()
+                // so the title is put into selectedQuiz and highlighting is handled
                 if (mContext instanceof MainActivity)
                 {
                     ((MainActivity) mContext).selectQuiz(v);
                 }
-
             }
         });
     }

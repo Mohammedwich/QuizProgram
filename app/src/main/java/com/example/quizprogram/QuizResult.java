@@ -1,3 +1,12 @@
+//Written by Mohammed Ahmed, msa190000
+//For CS4301.002, assignment 2, started Feb 7 2021.
+//Description:
+//The app will load up some quizzes out of text files and then offer the choices to the user in a
+// RecyclerView. They enter their name and pick a quiz and click next and take the quiz on the next
+// screen. Select an answer and click the answer button which will display the result. Click the
+// button again to load the next question. When done they are greeted and told their result on a
+// third screen. From the third screen they can return to the first.
+
 package com.example.quizprogram;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -7,6 +16,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
 
+//This class is for third screen
 public class QuizResult extends AppCompatActivity
 {
     String playerName = "";

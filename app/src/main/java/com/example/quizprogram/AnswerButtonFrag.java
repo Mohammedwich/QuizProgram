@@ -1,3 +1,12 @@
+//Written by Mohammed Ahmed, msa190000
+//For CS4301.002, assignment 2, started Feb 7 2021.
+//Description:
+//The app will load up some quizzes out of text files and then offer the choices to the user in a
+// RecyclerView. They enter their name and pick a quiz and click next and take the quiz on the next
+// screen. Select an answer and click the answer button which will display the result. Click the
+// button again to load the next question. When done they are greeted and told their result on a
+// third screen. From the third screen they can return to the first.
+
 package com.example.quizprogram;
 
 import android.os.Bundle;
@@ -8,7 +17,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.Toast;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -77,12 +85,14 @@ public class AnswerButtonFrag extends Fragment
     private class ButtonListener implements Button.OnClickListener
     {
 
+        //Note: Does not check for unselected answer. Will just give you a 0 for the question if you select nothing.
         @Override
         public void onClick(View v)
         {
             QuizQuestions quiz = (QuizQuestions) getActivity();
             quiz.setTextForAnswerValidity(quiz.textForAnswerValidity);
-            quiz.spawnAnswerValidityFrag(); //when clicked spawn the answervalidity fragment instead of the AnswerButton frag
+            //when this AnswerButton fragment is clicked, spawn the answervalidity fragment instead of the AnswerButton frag
+            quiz.spawnAnswerValidityFrag();
         }
     }
 }
