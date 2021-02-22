@@ -41,6 +41,12 @@ public class MainActivity extends AppCompatActivity
 
     RecyclerView aRecyclerView;
 
+    //adapter declared here instead of only in onCreate so it can be referenced outside of onCreate since onItemClick in QuizTopicAdapter is tied to selectQuiz() in this class
+    QuizTopicAdapter quizTopicAdapter;
+
+    int oldSelectedQuizPosition = -1; //will be used to notify adapter of change
+    View oldSelectedQuizView = null; //will be used to un-highlight a previously selected quiz.
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -95,7 +101,7 @@ public class MainActivity extends AppCompatActivity
 
         /*RecyclerView uses an adapter, which uses a holder class to display each view.
          View in holder, adapter spawns holders, Recyclerview displays them all. */
-        QuizTopicAdapter quizTopicAdapter = new QuizTopicAdapter(quizTitles, this);
+        quizTopicAdapter = new QuizTopicAdapter(quizTitles, this);
 
         aRecyclerView.setAdapter(quizTopicAdapter);
 
@@ -204,26 +210,32 @@ public class MainActivity extends AppCompatActivity
 
 
     /*Save the selected quiz's name so when user clicks next, it knows which quiz questions to load.
-    Note: selected topic must be clicked again to unselect it and make background white again.
-      If multiple topics are clicked once each they will all become highlighted blue but the
-      last topic clicked will be the selected one for the next button.
-    It is this way because I need a way to get all holders from a recycler view to be able to
-      make them all white when one is clicked. onClickItemListener doesn't exist for RecyclerViews */
-    public void selectQuiz(View view)
+    Note to self: Prof showed a different method for handling onItemClick situation with recycler view
+        after this was written so check that later.
+    */
+    public void selectQuiz(View view, int clickedItemPosition)
     {
         String quizName = ((TextView)view).getText().toString();
 
-        //If selected unselect and color white, else select and color blue
-        if(quizName.equals(selectedQuiz) == true)
+        //Un-highlight old selections
+        if(oldSelectedQuizView != null && quizName.equals(selectedQuiz) != true)
         {
-            view.setBackgroundColor(Color.parseColor("#ffffff"));
-            selectedQuiz = "";
+            oldSelectedQuizView.setBackgroundColor(Color.parseColor("#ffffff")); //make old selected white
+
+            if(oldSelectedQuizPosition != -1 && quizName.equals(selectedQuiz) != true)
+            {
+                quizTopicAdapter.notifyItemChanged(oldSelectedQuizPosition);
+            }
         }
-        else
-        {
-            view.setBackgroundColor(Color.parseColor("#1cd9ff"));
-            selectedQuiz = quizName;
-        }
+
+        //selected quiz used as both current value and also checked as a previous value next click before it is reassigned in the block above
+        selectedQuiz = quizName;
+        //Record current values so next click can reference them as the previous values.
+        oldSelectedQuizView = view;
+        oldSelectedQuizPosition = clickedItemPosition;
+
+        //Update the currently selected quiz to be highlighted blue
+        view.setBackgroundColor(Color.parseColor("#1cd9ff"));
 
     }
 

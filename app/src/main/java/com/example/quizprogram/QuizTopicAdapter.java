@@ -76,7 +76,8 @@ public class QuizTopicAdapter extends RecyclerView.Adapter<QuizTopicAdapter.Topi
                 // so the title is put into selectedQuiz and highlighting is handled
                 if (mContext instanceof MainActivity)
                 {
-                    ((MainActivity) mContext).selectQuiz(v);
+                    int itemPos = holder.getLayoutPosition();
+                    ((MainActivity) mContext).selectQuiz(v, itemPos);
                 }
             }
         });
