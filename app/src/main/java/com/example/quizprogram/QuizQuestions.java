@@ -1,11 +1,12 @@
-//Written by Mohammed Ahmed, msa190000
-//For CS4301.002, assignment 2, started Feb 7 2021.
-//Description:
-//The app will load up some quizzes out of text files and then offer the choices to the user in a
-// RecyclerView. They enter their name and pick a quiz and click next and take the quiz on the next
-// screen. Select an answer and click the answer button which will display the result. Click the
-// button again to load the next question. When done they are greeted and told their result on a
-// third screen. From the third screen they can return to the first.
+/*Written by Mohammed Ahmed, msa190000
+For CS4301.002, assignment 2, started Feb 7 2021.
+Description:
+The app will load up some quizzes out of text files and then offer the choices to the user in a
+RecyclerView. They enter their name and pick a quiz and click next and take the quiz on the next
+screen. Select an answer and click the answer button which will display the result. Click the
+button again to load the next question. When done they are greeted and told their result on a
+third screen. From the third screen they can return to the first.
+*/
 
 package com.example.quizprogram;
 
@@ -25,7 +26,6 @@ import java.util.ArrayList;
 // This class is for second screen
 public class QuizQuestions extends AppCompatActivity
 {
-    boolean fragNull = true;
     String textForAnswerValidity = "...";
 
     Serializable serializedQuiz;
@@ -165,8 +165,8 @@ public class QuizQuestions extends AppCompatActivity
         }
     }
 
-    //Clicking the answer validation fragment will call this
-    //Set the next question to be displayed after the current one is answered
+    /*Clicking the answer validation fragment will call this
+      Set the next question to be displayed after the current one is answered */
     public void setNextQuestions()
     {
         ++currentQuestionIndex;

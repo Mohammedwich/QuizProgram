@@ -1,11 +1,12 @@
-//Written by Mohammed Ahmed, msa190000
-//For CS4301.002, assignment 2, started Feb 7 2021.
-//Description:
-//The app will load up some quizzes out of text files and then offer the choices to the user in a
-// RecyclerView. They enter their name and pick a quiz and click next and take the quiz on the next
-// screen. Select an answer and click the answer button which will display the result. Click the
-// button again to load the next question. When done they are greeted and told their result on a
-// third screen. From the third screen they can return to the first.
+/*Written by Mohammed Ahmed, msa190000
+For CS4301.002, assignment 2, started Feb 7 2021.
+Description:
+The app will load up some quizzes out of text files and then offer the choices to the user in a
+RecyclerView. They enter their name and pick a quiz and click next and take the quiz on the next
+screen. Select an answer and click the answer button which will display the result. Click the
+button again to load the next question. When done they are greeted and told their result on a
+third screen. From the third screen they can return to the first.
+*/
 
 package com.example.quizprogram;
 
@@ -92,8 +93,8 @@ public class MainActivity extends AppCompatActivity
             quizTitles.add(listOfQuizzes.get(indexOfCurrentQuiz).getQuizTitle());
         }
 
-        //RecyclerView uses an adapter, which uses a holder class to display each view.
-        // View in holder, adapter spawns holders, Recyclerview displays them all.
+        /*RecyclerView uses an adapter, which uses a holder class to display each view.
+         View in holder, adapter spawns holders, Recyclerview displays them all. */
         QuizTopicAdapter quizTopicAdapter = new QuizTopicAdapter(quizTitles, this);
 
         aRecyclerView.setAdapter(quizTopicAdapter);
@@ -111,8 +112,8 @@ public class MainActivity extends AppCompatActivity
         String quizTitle = fileReader.nextLine(); //First line should hold quiz title
         theQuiz.setQuizTitle(quizTitle);
 
-        //reader cursor will be at the start of each question after each loop.
-        //Assumes text file is structured properly.
+        /*reader cursor will be at the start of each question after each loop.
+          Assumes text file is structured properly. */
         while(fileReader.hasNextLine())
         {
             String theQuestion = "";
@@ -125,8 +126,8 @@ public class MainActivity extends AppCompatActivity
             //Read 5 lines: A question and its 4 potential answers
             for(int i = 0; i < 5; i++)
             {
-                //if any line reads end up having no line, the loop will be broken to prevent an exception
-                // Breaking will also make the current question not be added to the quiz.
+                /*if any line reads end up having no line, the loop will be broken to prevent an exception
+                  Breaking will also make the current question not be added to the quiz.*/
                 if(fileReader.hasNextLine())
                 {
                     theQuestion = fileReader.nextLine();
@@ -202,12 +203,12 @@ public class MainActivity extends AppCompatActivity
     }
 
 
-    //Save the selected quiz's name so when user clicks next, it knows which quiz questions to load.
-    //Note: selected topic must be clicked again to unselect it and make background white again.
-    //  If multiple topics are clicked once each they will all become highlighted blue but the
-    //  last topic clicked will be the selected one for the next button.
-    //It is this way because I need a way to get all holders from a recycler view to be able to
-    //  make them all white when one is clicked. onClickItemListener doesn't exist for RecyclerViews
+    /*Save the selected quiz's name so when user clicks next, it knows which quiz questions to load.
+    Note: selected topic must be clicked again to unselect it and make background white again.
+      If multiple topics are clicked once each they will all become highlighted blue but the
+      last topic clicked will be the selected one for the next button.
+    It is this way because I need a way to get all holders from a recycler view to be able to
+      make them all white when one is clicked. onClickItemListener doesn't exist for RecyclerViews */
     public void selectQuiz(View view)
     {
         String quizName = ((TextView)view).getText().toString();
