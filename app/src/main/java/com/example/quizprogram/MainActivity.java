@@ -1,11 +1,12 @@
 /*Written by Mohammed Ahmed, msa190000
-For CS4301.002, assignment 2, started Feb 7 2021.
+For CS4301.002, assignment 3, started Mar 6 2021.
 Description:
 The app will load up some quizzes out of text files and then offer the choices to the user in a
 RecyclerView. They enter their name and pick a quiz and click next and take the quiz on the next
 screen. Select an answer and click the answer button which will display the result. Click the
 button again to load the next question. When done they are greeted and told their result on a
 third screen. From the third screen they can return to the first.
+The app also supports fetching quizzes from a website and taking them instead of local quizzes
 */
 
 package com.example.quizprogram;
@@ -22,6 +23,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -384,8 +386,7 @@ public class MainActivity extends AppCompatActivity
 
     public void radioClick(View view)
     {
-        //If clicked when already selected, do nothing since it would be redundant
-
+        //If clicked when already selected, do nothing since it would be redundant and a waste of processing
         if(view == localRadioButton && currentlySelectedRadioButton != view)
         {
             //Clear the onlineQuizTitles list so titles don't get appended to it every time online
@@ -425,12 +426,16 @@ public class MainActivity extends AppCompatActivity
             //  the list of online quizzes
             // The getQuizzesTask assigns a new adapter to the recycler view
 
+
+            //Show a toast message to user so they know data is being fetched and loaded
+            Toast.makeText(MainActivity.this, "Fetching and loading online quiz...", Toast.LENGTH_LONG).show();
         }
 
         //update what is currently selected
         currentlySelectedRadioButton = (RadioButton) view;
     }
 
+    //same as extractQuiz but takes InputStream. Can scrap them both and make a template to avoid duplicate code
     public Quiz extractQuizFromInputStream(InputStream theStream)
     {
         Quiz theQuiz = new Quiz();
@@ -550,7 +555,7 @@ public class MainActivity extends AppCompatActivity
             String currentLine;
             Scanner lineReader;
             InputStream inStream = null;
-            int response = 0; //for website connection reponse
+            int response = 0; //for website connection response
             String theUrl = urls[0];
 
             //make the URL object
@@ -590,7 +595,6 @@ public class MainActivity extends AppCompatActivity
                 //Take website content and put in inStream
                 try
                 {
-                    //TODO: check if this line needs to change since we are reading a txt file
                     inStream = httpConn.getInputStream();
                 } catch (IOException e)
                 {
