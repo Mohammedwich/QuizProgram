@@ -2,4 +2,6 @@
     <string name="app_name">QuizProgram</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="quiz_title_site">https://personal.utdallas.edu/~john.cole/Data/Quizzes.txt</string>
+    <string name="quiz_title_site_parent_dir">https://personal.utdallas.edu/~john.cole/Data/</string>
 </resources>
