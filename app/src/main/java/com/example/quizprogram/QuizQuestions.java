@@ -27,7 +27,12 @@ import java.util.ArrayList;
 // This class is for second screen
 public class QuizQuestions extends AppCompatActivity
 {
-    String textForAnswerValidity = "...";
+    //used in QuizQuestions, AnswerButtonFrag, AnswerValidityFrag
+    final String answerValidityBlank = "...";
+
+
+    //This string will be checked in AnswerButtonFrag onClick. Won't let you answer if no answer is selected
+    String textForAnswerValidity = answerValidityBlank;
 
     Serializable serializedQuiz;
     Quiz selectedQuiz;

@@ -114,6 +114,8 @@ public class AnswerValidityFrag extends Fragment
                 quiz.goToResultScreen();
             }
 
+            //reset the text to blank so it can be checked next time user clicks answer
+            quiz.setTextForAnswerValidity(quiz.answerValidityBlank);
             quiz.spawnAnswerButtonFrag(); //when clicked, respawn the Answer button fragment
         }
     }

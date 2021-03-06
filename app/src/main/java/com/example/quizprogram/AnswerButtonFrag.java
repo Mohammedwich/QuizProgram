@@ -93,8 +93,13 @@ public class AnswerButtonFrag extends Fragment
         {
             QuizQuestions quiz = (QuizQuestions) getActivity();
             quiz.setTextForAnswerValidity(quiz.textForAnswerValidity);
-            //when this AnswerButton fragment is clicked, spawn the answervalidity fragment instead of the AnswerButton frag
-            quiz.spawnAnswerValidityFrag();
+
+            //Don't let user answer if no choice is selected (text will be blank aka ...)
+            if(quiz.textForAnswerValidity.equals(quiz.answerValidityBlank) == false)
+            {
+                //when this AnswerButton fragment is clicked, spawn the answervalidity fragment instead of the AnswerButton frag
+                quiz.spawnAnswerValidityFrag();
+            }
         }
     }
 }
