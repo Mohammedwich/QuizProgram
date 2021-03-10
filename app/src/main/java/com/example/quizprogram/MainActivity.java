@@ -303,85 +303,95 @@ public class MainActivity extends AppCompatActivity
 
     public void goNext(View view)
     {
-        if(currentlySelectedRadioButton == localRadioButton)
+        //Make sure name is valid, not default text or empty string
+        if (playerNameEditText.getText().toString().compareTo("Enter name here") != 0 &&
+                playerNameEditText.getText().toString().compareTo("") != 0)
         {
-            //print error message in console if next is clicked but no quiz selected
-            if(selectedQuiz.equals("") == true)
-            {
-                System.out.println("No quiz selected");
-            }
 
-            if(selectedQuiz.equals("") == false) //make sure there is a quiz selected
+            if (currentlySelectedRadioButton == localRadioButton)
             {
-                Quiz quizToLoad = new Quiz();
-
-                //Take the correct quiz to pass to intent
-                for(int currentQuiz = 0; currentQuiz < listOfLocalQuizzes.size(); currentQuiz++)
+                //print error message in console if next is clicked but no quiz selected
+                if (selectedQuiz.equals("") == true)
                 {
-                    if(selectedQuiz.equals(listOfLocalQuizzes.get(currentQuiz).getQuizTitle()))
+                    System.out.println("No quiz selected");
+                }
+
+                if (selectedQuiz.equals("") == false) //make sure there is a quiz selected
+                {
+                    Quiz quizToLoad = new Quiz();
+
+                    //Take the correct quiz to pass to intent
+                    for (int currentQuiz = 0; currentQuiz < listOfLocalQuizzes.size(); currentQuiz++)
                     {
-                        quizToLoad = listOfLocalQuizzes.get(currentQuiz);
+                        if (selectedQuiz.equals(listOfLocalQuizzes.get(currentQuiz).getQuizTitle()))
+                        {
+                            quizToLoad = listOfLocalQuizzes.get(currentQuiz);
+                        }
                     }
-                }
 
-                //In case something weird happens, print out this message
-                if(quizToLoad.getQuizTitle().equals(""))
+                    //In case something weird happens, print out this message
+                    if (quizToLoad.getQuizTitle().equals(""))
+                    {
+                        System.out.println("Selected quiz does not match any available quizzes. Empty quiz passed to intent");
+                    }
+
+
+                    Intent intentObject = new Intent(this, QuizQuestions.class);
+
+                    // put the quiz in the intent
+                    intentObject.putExtra("chosenQuiz", quizToLoad);
+
+                    String theName = playerNameEditText.getText().toString();
+                    intentObject.putExtra("playerName", theName);
+
+                    startActivity(intentObject); //Go to next screen
+                }
+            } else if (currentlySelectedRadioButton == onlineRadioButton)
+            {
+                //print error message in console if next is clicked but no quiz selected
+                if (selectedOnlineQuiz.equals("") == true)
                 {
-                    System.out.println("Selected quiz does not match any available quizzes. Empty quiz passed to intent");
+                    System.out.println("No quiz selected");
                 }
 
+                if (selectedOnlineQuiz.equals("") == false)
+                {
+                    Quiz quizToLoad = new Quiz();
 
-                Intent intentObject = new Intent(this, QuizQuestions.class);
+                    //Take the correct quiz to pass to intent
+                    for (int currentQuiz = 0; currentQuiz < listOfOnlineQuizzes.size(); currentQuiz++)
+                    {
+                        if (selectedOnlineQuiz.equals(listOfOnlineQuizzes.get(currentQuiz).getQuizTitle()))
+                        {
+                            quizToLoad = listOfOnlineQuizzes.get(currentQuiz);
+                        }
+                    }
 
-                // put the quiz in the intent
-                intentObject.putExtra("chosenQuiz", quizToLoad);
+                    //In case something weird happens, print out this message
+                    if (quizToLoad.getQuizTitle().equals(""))
+                    {
+                        System.out.println("Selected quiz does not match any available quizzes. Empty quiz passed to intent");
+                    }
 
-                String theName = playerNameEditText.getText().toString();
-                intentObject.putExtra("playerName", theName);
 
-                startActivity(intentObject); //Go to next screen
+                    Intent intentObject = new Intent(this, QuizQuestions.class);
+
+                    // put the quiz in the intent
+                    intentObject.putExtra("chosenQuiz", quizToLoad);
+
+                    String theName = playerNameEditText.getText().toString();
+                    intentObject.putExtra("playerName", theName);
+
+                    startActivity(intentObject); //Go to next screen
+                }
             }
+
         }
-        else if (currentlySelectedRadioButton == onlineRadioButton)
+        else
         {
-            //print error message in console if next is clicked but no quiz selected
-            if(selectedOnlineQuiz.equals("") == true)
-            {
-                System.out.println("No quiz selected");
-            }
-
-            if(selectedOnlineQuiz.equals("") == false)
-            {
-                Quiz quizToLoad = new Quiz();
-
-                //Take the correct quiz to pass to intent
-                for (int currentQuiz = 0; currentQuiz < listOfOnlineQuizzes.size(); currentQuiz++)
-                {
-                    if (selectedOnlineQuiz.equals(listOfOnlineQuizzes.get(currentQuiz).getQuizTitle()))
-                    {
-                        quizToLoad = listOfOnlineQuizzes.get(currentQuiz);
-                    }
-                }
-
-                //In case something weird happens, print out this message
-                if (quizToLoad.getQuizTitle().equals(""))
-                {
-                    System.out.println("Selected quiz does not match any available quizzes. Empty quiz passed to intent");
-                }
-
-
-                Intent intentObject = new Intent(this, QuizQuestions.class);
-
-                // put the quiz in the intent
-                intentObject.putExtra("chosenQuiz", quizToLoad);
-
-                String theName = playerNameEditText.getText().toString();
-                intentObject.putExtra("playerName", theName);
-
-                startActivity(intentObject); //Go to next screen
-            }
+            //Show a toast message telling user the name is invalid
+            Toast.makeText(MainActivity.this, "Enter a valid name", Toast.LENGTH_LONG).show();
         }
-
     }
 
     public void radioClick(View view)
