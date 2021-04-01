@@ -8,34 +8,34 @@
 
     <EditText
         android:id="@+id/PlayerName"
-        android:layout_height="wrap_content"
         android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
         android:inputType="text"
         android:text="Enter name here"
         android:textSize="20sp"
-        android:layout_margin="5dp"
-        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent" />
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvQuizTitlesID"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        app:layout_constraintTop_toBottomOf="@id/PlayerName"
+        app:layout_constraintBottom_toTopOf="@id/NextButton"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/NextButton"/>
+        app:layout_constraintTop_toBottomOf="@id/PlayerName" />
 
     <Button
         android:id="@+id/NextButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Next"
         android:onClick="goNext"
+        android:text="Next"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.8" />
 
@@ -71,5 +71,37 @@
             android:text="Online quiz" />
 
     </RadioGroup>
+
+    <Button
+        android:id="@+id/createQuizButtonID"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Create Quiz"
+        android:layout_marginLeft="10dp"
+        android:onClick="createQuiz"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/NextButton"
+        tools:layout_editor_absoluteY="479dp" />
+
+    <Button
+        android:id="@+id/editQuizButtonID"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Edit Quiz"
+        android:layout_marginRight="10dp"
+        android:onClick="editQuiz"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/NextButton"
+        tools:layout_editor_absoluteY="479dp" />
+
+    <Button
+        android:id="@+id/testButtonID"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Test"
+        android:onClick="runTest"
+        app:layout_constraintLeft_toRightOf="@id/createQuizButtonID"
+        app:layout_constraintRight_toLeftOf="@id/editQuizButtonID"
+        app:layout_constraintBottom_toTopOf="@id/NextButton" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

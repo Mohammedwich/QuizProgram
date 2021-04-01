@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".CreateEditQuiz">
+
+        <EditText
+            android:id="@+id/createQuizFileNameID"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="text"
+            android:text="Quiz file name here"
+            android:textSize="16sp"
+            android:layout_margin="5dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            />
+
+        <EditText
+            android:id="@+id/createQuizTitleID"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="text"
+            android:text="Quiz title here"
+            android:textSize="16sp"
+            android:layout_margin="5dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/createQuizFileNameID"
+            />
+
+        <EditText
+            android:id="@+id/createQuizQuestionID"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="text"
+            android:text="Current question title here"
+            android:textSize="16sp"
+            android:layout_margin="5dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/createQuizTitleID"
+            />
+
+        <RadioGroup
+            android:id="@+id/createQuizAnsRadGrpID"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/createQuizQuestionID">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <RadioButton
+                    android:id="@+id/createQuizAns1RadioID"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=""
+                    android:onClick="designateAsCorrectAnswer" />
+
+                <EditText
+                    android:id="@+id/createQuizAns1TextID"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:inputType="textMultiLine"
+                    android:singleLine="false"
+                    android:hint="First Answer" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <RadioButton
+                    android:id="@+id/createQuizAns2RadioID"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=""
+                    android:onClick="designateAsCorrectAnswer" />
+
+                <EditText
+                    android:id="@+id/createQuizAns2TextID"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:inputType="textMultiLine"
+                    android:singleLine="false"
+                    android:hint="Second Answer" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <RadioButton
+                    android:id="@+id/createQuizAns3RadioID"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=""
+                    android:onClick="designateAsCorrectAnswer" />
+
+                <EditText
+                    android:id="@+id/createQuizAns3TextID"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:inputType="textMultiLine"
+                    android:singleLine="false"
+                    android:hint="Third Answer" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <RadioButton
+                    android:id="@+id/createQuizAns4RadioID"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=""
+                    android:onClick="designateAsCorrectAnswer" />
+
+                <EditText
+                    android:id="@+id/createQuizAns4TextID"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:inputType="textMultiLine"
+                    android:singleLine="false"
+                    android:hint="Fourth Answer" />
+            </LinearLayout>
+        </RadioGroup>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvCreateQuizQuestionTitlesID"
+            android:layout_width="match_parent"
+            android:layout_height="150dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/createQuizAnsRadGrpID" />
+
+        <Button
+            android:id="@+id/createQuizSaveBtnID"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Save"
+            android:layout_margin="8dp"
+            android:onClick="saveQuiz"
+            app:layout_constraintVertical_bias="0.9"
+            app:layout_constraintTop_toBottomOf="@id/rvCreateQuizQuestionTitlesID"
+            app:layout_constraintBottom_toTopOf="@id/createQuizDoneBtnID"
+            app:layout_constraintLeft_toLeftOf="parent"
+            />
+
+        <Button
+            android:id="@+id/createQuizDeleteBtnID"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Delete"
+            android:layout_margin="8dp"
+            android:onClick="deleteQuiz"
+            app:layout_constraintVertical_bias="0.9"
+            app:layout_constraintTop_toBottomOf="@id/rvCreateQuizQuestionTitlesID"
+            app:layout_constraintBottom_toTopOf="@id/createQuizDoneBtnID"
+            app:layout_constraintRight_toRightOf="parent"
+            />
+
+        <Button
+            android:id="@+id/createQuizClearBtnID"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Clear"
+            android:layout_margin="8dp"
+            android:onClick="clearQuiz"
+            app:layout_constraintVertical_bias="0.9"
+            app:layout_constraintTop_toBottomOf="@id/rvCreateQuizQuestionTitlesID"
+            app:layout_constraintBottom_toTopOf="@id/createQuizDoneBtnID"
+            app:layout_constraintLeft_toRightOf="@id/createQuizSaveBtnID"
+            app:layout_constraintRight_toLeftOf="@id/createQuizDeleteBtnID"
+            />
+
+        <Button
+            android:id="@+id/createQuizDoneBtnID"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Done"
+            android:layout_margin="8dp"
+            android:onClick="doneQuiz"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>

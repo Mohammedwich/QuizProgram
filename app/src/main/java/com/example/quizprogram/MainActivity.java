@@ -50,7 +50,8 @@ public class MainActivity extends AppCompatActivity
 
     RecyclerView aRecyclerView;
 
-    //adapter declared here instead of only in onCreate so it can be referenced outside of onCreate since onItemClick in QuizTopicAdapter is tied to selectQuiz() in this class
+    //adapter declared here instead of only in onCreate so it can be referenced outside of onCreate
+    // since onItemClick in QuizTopicAdapter is tied to selectQuiz() in this class
     QuizTopicAdapter quizTopicAdapter;
 
     int oldSelectedQuizPosition = -1; //will be used to notify adapter of change
@@ -392,6 +393,32 @@ public class MainActivity extends AppCompatActivity
             //Show a toast message telling user the name is invalid
             Toast.makeText(MainActivity.this, "Enter a valid name", Toast.LENGTH_LONG).show();
         }
+    }
+
+    public void createQuiz(View view)
+    {
+        Intent intentObject = new Intent(this, CreateEditQuiz.class);
+
+        String theName = playerNameEditText.getText().toString();
+        intentObject.putExtra("playerName", theName);
+
+        startActivity(intentObject); //Go to next screen
+    }
+
+    public void editQuiz(View view)
+    {
+        Intent intentObject = new Intent(this, CreateEditQuiz.class);
+
+        String theName = playerNameEditText.getText().toString();
+        intentObject.putExtra("playerName", theName);
+
+        startActivity(intentObject); //Go to next screen
+    }
+
+    //TODO: debug code. Remove later
+    public void runTest(View view)
+    {
+        System.out.println("selected quiz is: " + selectedQuiz);
     }
 
     public void radioClick(View view)
