@@ -87,7 +87,6 @@ public class AnswerButtonFrag extends Fragment
     private class ButtonListener implements Button.OnClickListener
     {
 
-        //Note: Does not check for unselected answer. Will just give you a 0 for the question if you select nothing.
         @Override
         public void onClick(View v)
         {
