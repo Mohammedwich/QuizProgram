@@ -166,7 +166,7 @@
             android:layout_height="wrap_content"
             android:text="Delete"
             android:layout_margin="8dp"
-            android:onClick="deleteQuiz"
+            android:onClick="deleteQuestion"
             app:layout_constraintVertical_bias="0.9"
             app:layout_constraintTop_toBottomOf="@id/rvCreateQuizQuestionTitlesID"
             app:layout_constraintBottom_toTopOf="@id/createQuizDoneBtnID"

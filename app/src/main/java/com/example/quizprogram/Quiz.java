@@ -171,6 +171,30 @@ public class Quiz implements Serializable
         listOfQuestions.add(aQuestion);
     }
 
+    /**returns true if it successfully deleted a question, false otherwise */
+    public boolean deleteQuestion(String theQuestion)
+    {
+        int currentIndex = 0;
+        boolean questionFound = false;
+
+        for(; currentIndex < listOfQuestions.size(); currentIndex++)
+        {
+            String currentQuestion = listOfQuestions.get(currentIndex).getTheQuestion();
+            if (currentQuestion.equals(theQuestion) == true)
+            {
+                questionFound = true;
+                break;
+            }
+        }
+
+        if(questionFound == true)
+        {
+            listOfQuestions.remove(currentIndex);
+        }
+
+        return questionFound;
+    }
+
     public void deleteAllQuestions()
     {
         listOfQuestions.clear();
