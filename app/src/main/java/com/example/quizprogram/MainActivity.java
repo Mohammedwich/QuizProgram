@@ -395,24 +395,60 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
+    //TODO: make buttons vanish if name not professor
     public void createQuiz(View view)
     {
-        Intent intentObject = new Intent(this, CreateEditQuiz.class);
-
         String theName = playerNameEditText.getText().toString();
-        intentObject.putExtra("playerName", theName);
 
-        startActivity(intentObject); //Go to next screen
+        //TODO: enable this line later
+        //if(theName.equalsIgnoreCase("professor") == true)
+        if(true)
+        {
+            Intent intentObject = new Intent(this, CreateEditQuiz.class);
+
+            //mode will be create or edit which affects CreateEditQuiz screen's behavior
+            intentObject.putExtra("mode", "create");
+
+            startActivity(intentObject);
+        }
+        else
+        {
+            System.out.println("Name is not professor and this button should be hidden");
+        }
     }
 
     public void editQuiz(View view)
     {
-        Intent intentObject = new Intent(this, CreateEditQuiz.class);
-
         String theName = playerNameEditText.getText().toString();
-        intentObject.putExtra("playerName", theName);
 
-        startActivity(intentObject); //Go to next screen
+        //TODO: enable this line later
+        //if(theName.equalsIgnoreCase("professor") == true && selectedQuiz.equals("") == false)
+        if(selectedQuiz.equals("") == false)
+        {
+            Quiz quizToLoad = new Quiz();
+
+            //Take the correct quiz to pass to intent
+            for (int currentQuiz = 0; currentQuiz < listOfLocalQuizzes.size(); currentQuiz++)
+            {
+                if (selectedQuiz.equals(listOfLocalQuizzes.get(currentQuiz).getQuizTitle()))
+                {
+                    quizToLoad = listOfLocalQuizzes.get(currentQuiz);
+                }
+            }
+
+            Intent intentObject = new Intent(this, CreateEditQuiz.class);
+            // put the quiz in the intent
+            intentObject.putExtra("chosenQuiz", quizToLoad);
+
+            //mode will be create or edit which affects CreateEditQuiz screen's behavior
+            intentObject.putExtra("mode", "edit");
+
+            startActivity(intentObject);
+        }
+        else
+        {
+            System.out.println("Name is not professor or no quiz selected and this button should be hidden");
+        }
     }
 
     //TODO: debug code. Remove later

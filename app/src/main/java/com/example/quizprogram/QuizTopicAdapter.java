@@ -80,6 +80,18 @@ public class QuizTopicAdapter extends RecyclerView.Adapter<QuizTopicAdapter.Topi
                     int itemPos = holder.getLayoutPosition();
                     ((MainActivity) mContext).selectQuiz(v, itemPos);
                 }
+
+                //Added this block here since I am re-using this to display a list of questions in QuizTopicAdapter
+                // Consider making an interface that implements a function called selectHolder() and
+                // making any class that uses this adapter implement that interface. Then we can just
+                // call selectHolder without needing a block like this for each class and without
+                // needing to check mContext instanceOf because selectHolder() will be there since
+                // mContext must implement the interface to use this adapter.
+                if (mContext instanceof CreateEditQuiz)
+                {
+                    int itemPos = holder.getLayoutPosition();
+                    ((CreateEditQuiz) mContext).selectQuestion(v, itemPos);
+                }
             }
         });
     }
