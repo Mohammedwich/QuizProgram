@@ -249,12 +249,29 @@ public class CreateEditQuiz extends AppCompatActivity
 
         if(mode.equalsIgnoreCase("edit") == true)
         {
+            String theQuestion = questionField.getText().toString();
+            String theAnswer1 = answer1Text.getText().toString();
+            String theAnswer2 = answer2Text.getText().toString();
+            String theAnswer3 = answer3Text.getText().toString();
+            String theAnswer4 = answer4Text.getText().toString();
+            String theCorrectAnswer = currentlyMarkedCorrectAnswerString;
 
+            String [] theNewQuestion = {theQuestion, theAnswer1, theAnswer2, theAnswer3, theAnswer4, theCorrectAnswer};
+
+            listOfQuestions.set(currentSelectedQuestionPosition, theNewQuestion);
+            listOfQuestionTitles.set(currentSelectedQuestionPosition, theQuestion);
+            newQuizObject.setQuestion(currentSelectedQuestionPosition, theQuestion, theAnswer1, theAnswer2, theAnswer3, theAnswer4, theCorrectAnswer);
+
+            questionTitlesAdapter.notifyItemChanged(currentSelectedQuestionPosition);
+
+            saveQuizToFile();
+            clearFields();
         }
     }
 
     public void deleteQuestion(View view)
     {
+        //TODO: Consider invalidating the screen so it rerenders properly after deleting if issues pop up
         int deletedQuestionPosition = currentSelectedQuestionPosition;
         boolean questionDeleteResult = newQuizObject.deleteQuestion(selectedQuestionTitle);
         System.out.println("Question delete result is" + questionDeleteResult + "for: " + selectedQuestionTitle);
@@ -293,7 +310,17 @@ public class CreateEditQuiz extends AppCompatActivity
 
     public void saveQuizToFile()
     {
+        //create new file here using the provided file name. Can overwrite it when updating its quiz
+        if(mode.equalsIgnoreCase("create") == true)
+        {
 
+        }
+
+        //do not use provided file name if accessible. Overwrite quiz in the chosen quiz's file with modified quiz.
+        if(mode.equalsIgnoreCase("edit") == true)
+        {
+
+        }
     }
 
     public void doneQuiz(View view)

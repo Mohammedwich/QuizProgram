@@ -160,6 +160,12 @@ public class Quiz implements Serializable
         return listOfQuestionDataArrays;
     }
 
+    public void setQuestion(int position, String question, String choice1, String choice2, String choice3, String choice4, String theRightChoice)
+    {
+        Question newQuestion = new Question(question, choice1, choice2, choice3, choice4, theRightChoice);
+        listOfQuestions.set(position, newQuestion);
+    }
+
     public void setListOfQuestions(ArrayList<Question> listOfQuestions)
     {
         this.listOfQuestions = listOfQuestions;
