@@ -7,6 +7,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.RadioButton;
@@ -24,7 +26,7 @@ public class CreateEditQuiz extends AppCompatActivity
     EditText quizFileNameField;
     EditText quizTitleField;
     EditText questionField;
-    RadioGroup answersRadioGroup;
+    RadioGroup answersRadioGroup; //useless because it doesn't recognize nested RadioButtons as its children
     RadioButton answer1Radio;
     EditText answer1Text;
     RadioButton answer2Radio;
@@ -71,7 +73,7 @@ public class CreateEditQuiz extends AppCompatActivity
         quizFileNameField = findViewById(R.id.createQuizFileNameID);
         quizTitleField = findViewById(R.id.createQuizTitleID);
         questionField = findViewById(R.id.createQuizQuestionID);
-        //answersRadioGroup = findViewById(R.id.createQuizAnsRadGrpID);
+        answersRadioGroup = findViewById(R.id.createQuizAnsRadGrpID);
         answer1Radio = findViewById(R.id.createQuizAns1RadioID);
         answer1Text = findViewById(R.id.createQuizAns1TextID);
         answer2Radio = findViewById(R.id.createQuizAns2RadioID);
@@ -80,6 +82,12 @@ public class CreateEditQuiz extends AppCompatActivity
         answer3Text = findViewById(R.id.createQuizAns3TextID);
         answer4Radio = findViewById(R.id.createQuizAns4RadioID);
         answer4Text = findViewById(R.id.createQuizAns4TextID);
+
+        //This is so the watcher can clear selected radios if text is edited so they must select again
+        answer1Text.addTextChangedListener(new AnswerTextWatcher());
+        answer2Text.addTextChangedListener(new AnswerTextWatcher());
+        answer3Text.addTextChangedListener(new AnswerTextWatcher());
+        answer4Text.addTextChangedListener(new AnswerTextWatcher());
 
         theFileDir = getFilesDir();
 
@@ -97,6 +105,8 @@ public class CreateEditQuiz extends AppCompatActivity
             questionTitlesAdapter = new QuizTopicAdapter(listOfQuestionTitles, this);
             questionTitlesRecyclerView.setAdapter(questionTitlesAdapter);
             questionTitlesRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+            questionField.setHint("Question title here");
         }
 
 
@@ -121,7 +131,7 @@ public class CreateEditQuiz extends AppCompatActivity
 
             quizFileNameField.setText("xxxxxxx");
             quizTitleField.setText(selectedQuiz.getQuizTitle());
-            questionField.setText("select a question below");
+            questionField.setHint("Select a question below");
         }
 
     }
@@ -168,6 +178,8 @@ public class CreateEditQuiz extends AppCompatActivity
         answer3Text.setText(theAnswer3);
         answer4Text.setText(theAnswer4);
 
+        clearCheckAllAnswerRadios(); //uncheck all to wipe any previous toggles so a new toggle can be set
+
         if(theCorrectAnswer.equals(theAnswer1) == true) {
             answer1Radio.toggle();
         }
@@ -195,24 +207,37 @@ public class CreateEditQuiz extends AppCompatActivity
         }
     }
 
+    //The radio group is not working because each radio button is nested inside a LinearLayout
+    // so the radio grouop does not recognize the buttons as its children. This func unchecks them all
+    public void clearCheckAllAnswerRadios()
+    {
+        answer1Radio.setChecked(false);
+        answer2Radio.setChecked(false);
+        answer3Radio.setChecked(false);
+        answer4Radio.setChecked(false);
+    }
+
     public void designateAsCorrectAnswer(View view)
     {
+
+        clearCheckAllAnswerRadios(); //uncheck all
+
         if(view == answer1Radio)
         {
             currentlyMarkedCorrectAnswerString = answer1Text.getText().toString();
-            ((RadioButton)view).toggle();
+            ((RadioButton)view).toggle(); //check the right one
         }
         else if(view == answer2Radio) {
             currentlyMarkedCorrectAnswerString = answer2Text.getText().toString();
-            ((RadioButton)view).toggle();
+            ((RadioButton)view).toggle(); //check the right one
         }
-        else if(view == answer2Radio) {
+        else if(view == answer3Radio) {
             currentlyMarkedCorrectAnswerString = answer3Text.getText().toString();
-            ((RadioButton)view).toggle();
+            ((RadioButton)view).toggle(); //check the right one
         }
-        else if(view == answer2Radio) {
+        else if(view == answer4Radio) {
             currentlyMarkedCorrectAnswerString = answer4Text.getText().toString();
-            ((RadioButton)view).toggle();
+            ((RadioButton)view).toggle(); //check the right one
         }
         else {
             System.out.println("Error: The selected radio button view does not match any of the 4 radio buttons.");
@@ -246,6 +271,13 @@ public class CreateEditQuiz extends AppCompatActivity
                 //Tell user they need a valid file name
                 Toast.makeText(CreateEditQuiz.this, "File name must begin with \"Quiz\"", Toast.LENGTH_LONG).show();
             }
+            //make sure an answer's radio is marked
+            else if(answer1Radio.isChecked() == false && answer2Radio.isChecked() == false
+                    && answer3Radio.isChecked() == false &&answer4Radio.isChecked() == false)
+            {
+                //Tell user they need to check a radio button
+                Toast.makeText(CreateEditQuiz.this, "check one of the radio buttons", Toast.LENGTH_LONG).show();
+            }
             else {
                 listOfQuestions.add(theNewQuestion);
 
@@ -272,9 +304,9 @@ public class CreateEditQuiz extends AppCompatActivity
             String theAnswer4 = answer4Text.getText().toString();
             String theCorrectAnswer = currentlyMarkedCorrectAnswerString;
 
-            String [] theNewQuestion = {theQuestion, theAnswer1, theAnswer2, theAnswer3, theAnswer4, theCorrectAnswer};
+            String [] theNewQuestionObject = {theQuestion, theAnswer1, theAnswer2, theAnswer3, theAnswer4, theCorrectAnswer};
 
-            listOfQuestions.set(currentSelectedQuestionPosition, theNewQuestion);
+            listOfQuestions.set(currentSelectedQuestionPosition, theNewQuestionObject);
             listOfQuestionTitles.set(currentSelectedQuestionPosition, theQuestion);
             newQuizObject.setQuestion(currentSelectedQuestionPosition, theQuestion, theAnswer1, theAnswer2, theAnswer3, theAnswer4, theCorrectAnswer);
 
@@ -303,8 +335,7 @@ public class CreateEditQuiz extends AppCompatActivity
         questionTitlesAdapter.notifyItemRangeChanged(deletedQuestionPosition, listOfQuestionTitles.size());
 
         //reset invalidated things caused by delete
-        currentSelectedQuestionPosition = -1;
-        oldSelectedQuestionView = null;
+        resetSelectedTrackers();
 
         clearFields();
     }
@@ -316,14 +347,26 @@ public class CreateEditQuiz extends AppCompatActivity
         answer2Text.setText("");
         answer3Text.setText("");
         answer4Text.setText("");
-        answersRadioGroup.clearCheck();
+        clearCheckAllAnswerRadios();
     }
 
     public void clearQuiz(View view)
     {
+        oldSelectedQuestionView.setBackgroundColor(Color.parseColor("#ffffff"));
         clearFields();
+        resetSelectedTrackers();
     }
 
+    //will be used when we clear the screen so weird stuff doesn't happen because adapter updates so nothing looks selected but in reality stuff is selected
+    public void resetSelectedTrackers()
+    {
+        int oldSelectedQuestionPosition = -1;
+        View oldSelectedQuestionView = null;
+        String selectedQuestionTitle = "";
+        int currentSelectedQuestionPosition = -1;
+
+        String currentlyMarkedCorrectAnswerString = "";
+    }
 
     public void saveQuizToFile()
     {
@@ -376,7 +419,36 @@ public class CreateEditQuiz extends AppCompatActivity
 
     public void runtest(View view)
     {
-        System.out.println("editFile path: " + theFileToEditPath);
-        System.out.println("file dir: " + theFileDir);
+        answer1Radio.setChecked(false);
+        answer2Radio.setChecked(false);
+        answer3Radio.setChecked(false);
+        answer4Radio.setChecked(false);
+
+    }
+
+    //will be used so the EditText answers can uncheck the radio after text changes
+    //This is done because if text is changed after a radio was clicked then the string radio recorded
+    // when clicked and the new string will not match. Unselecting radios makes user select again after edit
+    private class AnswerTextWatcher implements TextWatcher
+    {
+
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after)
+        {
+
+        }
+
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count)
+        {
+
+        }
+
+        @Override
+        public void afterTextChanged(Editable s)
+        {
+            clearCheckAllAnswerRadios();
+        }
     }
 }
+

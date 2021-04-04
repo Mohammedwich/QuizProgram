@@ -41,7 +41,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="text"
-            android:text="Current question title here"
             android:textSize="16sp"
             android:layout_margin="5dp"
             app:layout_constraintLeft_toLeftOf="parent"
@@ -75,7 +74,7 @@
                     android:layout_height="wrap_content"
                     android:inputType="textMultiLine"
                     android:singleLine="false"
-                    android:hint="First Answer" />
+                    android:hint="First Answer"/>
             </LinearLayout>
 
             <LinearLayout
