@@ -258,6 +258,7 @@ public class CreateEditQuiz extends AppCompatActivity
 
     public void saveQuiz(View view)
     {
+        //if in create mode
         if(mode.equalsIgnoreCase("create") == true)
         {
             String theQuestion = questionField.getText().toString();
@@ -267,7 +268,7 @@ public class CreateEditQuiz extends AppCompatActivity
             String theAnswer4 = answer4Text.getText().toString();
             String theCorrectAnswer = currentlyMarkedCorrectAnswerString;
 
-            String [] theNewQuestion = {theQuestion, theAnswer1, theAnswer2, theAnswer3, theAnswer4, theCorrectAnswer};
+            String [] theNewQuestionObject = {theQuestion, theAnswer1, theAnswer2, theAnswer3, theAnswer4, theCorrectAnswer};
 
             //make sure no field is blank before adding question to quiz object
             if(quizTitleField.getText().toString().equals("")
@@ -278,10 +279,11 @@ public class CreateEditQuiz extends AppCompatActivity
                 Toast.makeText(CreateEditQuiz.this, "Title, Question, answers, and correct answer must be set", Toast.LENGTH_LONG).show();
             }
             //make sure file name is valid
-            else if(theFileToEditPath.startsWith("Quiz") == false)
+            else if(quizFileNameField.getText().toString().startsWith("Quiz") == false
+                        || quizFileNameField.getText().toString().endsWith(".txt") == false)
             {
                 //Tell user they need a valid file name
-                Toast.makeText(CreateEditQuiz.this, "File name must begin with \"Quiz\"", Toast.LENGTH_LONG).show();
+                Toast.makeText(CreateEditQuiz.this, "File name must begin with \"Quiz\" and end with \".txt\"", Toast.LENGTH_LONG).show();
             }
             //make sure an answer's radio is marked
             else if(answer1Radio.isChecked() == false && answer2Radio.isChecked() == false
@@ -291,22 +293,35 @@ public class CreateEditQuiz extends AppCompatActivity
                 Toast.makeText(CreateEditQuiz.this, "check one of the radio buttons", Toast.LENGTH_LONG).show();
             }
             else {
-                listOfQuestions.add(theNewQuestion);
+                //Adjusting an existing question
+                if(theQuestion.equals(listOfQuestionTitles.get(currentSelectedQuestionPosition)) == true)
+                {
+                    listOfQuestions.set(currentSelectedQuestionPosition, theNewQuestionObject);
+                    listOfQuestionTitles.set(currentSelectedQuestionPosition, theQuestion);
+                    newQuizObject.setQuestion(currentSelectedQuestionPosition, theQuestion, theAnswer1, theAnswer2, theAnswer3, theAnswer4, theCorrectAnswer);
 
-                listOfQuestionTitles.add(theQuestion);
-                //make recyclerView refresh by telling adapter about the new item
-                //using index size-1 because the new question added at the end
-                questionTitlesAdapter.notifyItemInserted(listOfQuestionTitles.size()-1);
+                    questionTitlesAdapter.notifyItemChanged(currentSelectedQuestionPosition);
+                }
+                //making a new question
+                else if (theQuestion.equals(listOfQuestionTitles.get(currentSelectedQuestionPosition)) == false)
+                {
+                    listOfQuestions.add(theNewQuestionObject);
+                    listOfQuestionTitles.add(theQuestion);
+                    newQuizObject.addQuestion(theQuestion, theAnswer1, theAnswer2, theAnswer3, theAnswer4, theCorrectAnswer);
 
-                newQuizObject.addQuestion(theQuestion, theAnswer1, theAnswer2, theAnswer3, theAnswer4, theCorrectAnswer);
+                    //size of titles minus 1 is the index of the newly added item
+                    questionTitlesAdapter.notifyItemChanged(listOfQuestionTitles.size() - 1);
+                }
+                else {
+                    System.out.println("Error: saveQuiz() edit mode failed to adjust or add a question");
+                }
+
                 saveQuizToFile();
                 clearFields();
-
-                //reset this after quiz saved so we never end up with a nonexistent correct answer and so can check if empty
-                currentlyMarkedCorrectAnswerString = "";
             }
         }
 
+        //If in edit mode
         if(mode.equalsIgnoreCase("edit") == true)
         {
             String theQuestion = questionField.getText().toString();
@@ -400,6 +415,7 @@ public class CreateEditQuiz extends AppCompatActivity
         answer3Text.setText("");
         answer4Text.setText("");
         clearCheckAllAnswerRadios();
+        resetSelectedTrackers();
     }
 
     public void clearQuiz(View view)
@@ -437,7 +453,17 @@ public class CreateEditQuiz extends AppCompatActivity
         //create new file here using the provided file name. Can overwrite it when updating its quiz
         if(mode.equalsIgnoreCase("create") == true)
         {
-            File newFile = new File(quizFileNameField.getText().toString());
+            String newFileFullPath = theFileDir + "/" + quizFileNameField.getText().toString();
+
+            File newFile = new File(newFileFullPath);
+            try
+            {
+                newFile.createNewFile();
+            } catch (IOException e)
+            {
+                e.printStackTrace();
+                System.out.println("Error: failed to create new quiz file in saveToQuizFile()");
+            }
 
             try
             {
@@ -445,7 +471,7 @@ public class CreateEditQuiz extends AppCompatActivity
             } catch (IOException e)
             {
                 e.printStackTrace();
-                System.out.println("Failed to write the newly created quiz to a file");
+                System.out.println("Error: Failed to write the newly created quiz to a file");
             }
         }
 
@@ -476,10 +502,7 @@ public class CreateEditQuiz extends AppCompatActivity
 
     public void runtest(View view)
     {
-        answer1Radio.setChecked(false);
-        answer2Radio.setChecked(false);
-        answer3Radio.setChecked(false);
-        answer4Radio.setChecked(false);
+        System.out.println(theFileDir + "/" + quizFileNameField.getText().toString());
 
     }
 
