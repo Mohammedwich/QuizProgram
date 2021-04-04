@@ -19,7 +19,10 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.TextView;
@@ -67,6 +70,8 @@ public class MainActivity extends AppCompatActivity
     RadioButton currentlySelectedRadioButton;
     RadioButton localRadioButton;
     RadioButton onlineRadioButton;
+    Button createQuizButton;
+    Button editQuizButton;
 
     GetQuizDirectoriesTask getQuizDirectoriesTask;
     GetOnlineQuizzesTask getOnlineQuizzesTask;
@@ -87,6 +92,11 @@ public class MainActivity extends AppCompatActivity
 
         playerNameEditText = findViewById(R.id.PlayerName);
         aRecyclerView = findViewById(R.id.rvQuizTitlesID);
+        createQuizButton = findViewById(R.id.createQuizButtonID);
+        editQuizButton = findViewById(R.id.editQuizButtonID);
+
+        playerNameEditText.addTextChangedListener(new PlayerNameWatcher());
+        hideProfessorButtons();
 
         theFileDir = getFilesDir();
 
@@ -147,6 +157,19 @@ public class MainActivity extends AppCompatActivity
         currentlySelectedRadioButton = localRadioButton;
 
     } // onCreate end
+
+
+    public void showProfessorButtons()
+    {
+        createQuizButton.setVisibility(View.VISIBLE);
+        editQuizButton.setVisibility(View.VISIBLE);
+    }
+
+    public void hideProfessorButtons()
+    {
+        createQuizButton.setVisibility(View.INVISIBLE);
+        editQuizButton.setVisibility(View.INVISIBLE);
+    }
 
     //Takes a txt quiz file and returns a quiz object that has a title and contains question objects
     public Quiz extractQuiz(File quizFile) throws FileNotFoundException
@@ -395,26 +418,14 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-    //TODO: make buttons vanish if name not professor
     public void createQuiz(View view)
     {
-        String theName = playerNameEditText.getText().toString();
+        Intent intentObject = new Intent(this, CreateEditQuiz.class);
 
-        //TODO: enable this line later
-        //if(theName.equalsIgnoreCase("professor") == true)
-        if(true)
-        {
-            Intent intentObject = new Intent(this, CreateEditQuiz.class);
+        //mode will be create or edit which affects CreateEditQuiz screen's behavior
+        intentObject.putExtra("mode", "create");
 
-            //mode will be create or edit which affects CreateEditQuiz screen's behavior
-            intentObject.putExtra("mode", "create");
-
-            startActivity(intentObject);
-        }
-        else
-        {
-            System.out.println("Name is not professor and this button should be hidden");
-        }
+        startActivity(intentObject);
     }
 
     public void editQuiz(View view)
@@ -423,8 +434,6 @@ public class MainActivity extends AppCompatActivity
 
         if (currentlySelectedRadioButton == localRadioButton)
         {
-            //TODO: enable this line later
-            //if(theName.equalsIgnoreCase("professor") == true && selectedQuiz.equals("") == false)
             if(selectedQuiz.equals("") == false)
             {
                 Quiz quizToLoad = new Quiz();
@@ -452,27 +461,13 @@ public class MainActivity extends AppCompatActivity
             }
             else
             {
-                System.out.println("Name is not professor or no quiz selected and this button should be hidden");
+                System.out.println("No quiz selected");
                 Toast.makeText(MainActivity.this, "No quiz selected", Toast.LENGTH_LONG).show();
             }
         }
         else {
             Toast.makeText(MainActivity.this, "Cannot edit quiz in online mode", Toast.LENGTH_LONG).show();
         }
-    }
-
-    //TODO: debug code. Remove later
-    public void runTest(View view)
-    {
-        System.out.println("Filedir: " + theFileDir);
-        if (oldSelectedQuizPosition >= 0)
-        {
-            System.out.println("file array: " + arrayOfQuizFiles[oldSelectedQuizPosition]);
-        }
-        else {
-            System.out.println("invalid index");
-        }
-        System.out.println("selected quiz: " + selectedQuiz);
     }
 
     public void radioClick(View view)
@@ -834,6 +829,35 @@ public class MainActivity extends AppCompatActivity
 
             //layout managers lets us set a layout and control how it works like when to recycle and other stuff
             aRecyclerView.setLayoutManager(new LinearLayoutManager(context));
+        }
+    } //Task class end
+
+    //will be used to watch player name. If it becomes "Professor", new buttons appear
+    private class PlayerNameWatcher implements TextWatcher
+    {
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after)
+        {
+
+        }
+
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count)
+        {
+
+        }
+
+        @Override
+        public void afterTextChanged(Editable s)
+        {
+            if(playerNameEditText.getText().toString().equalsIgnoreCase("Professor") == true)
+            {
+                showProfessorButtons();
+            }
+            else {
+                hideProfessorButtons();
+            }
+
         }
     }
 }

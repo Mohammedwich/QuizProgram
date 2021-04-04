@@ -389,7 +389,6 @@ public class CreateEditQuiz extends AppCompatActivity
 
     public void deleteQuestion(View view)
     {
-        //TODO: Consider invalidating the screen so it rerenders properly after deleting if issues pop up
         int deletedQuestionPosition = currentSelectedQuestionPosition;
         boolean questionDeleteResult = newQuizObject.deleteQuestion(selectedQuestionTitle);
         System.out.println("Question delete result is" + questionDeleteResult + "for: " + selectedQuestionTitle);
@@ -523,12 +522,6 @@ public class CreateEditQuiz extends AppCompatActivity
         Intent intent = new Intent(this, MainActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP); //clears the stack of all the loaded activities
         startActivity(intent);
-    }
-
-    public void runtest(View view)
-    {
-        System.out.println(theFileDir + "/" + quizFileNameField.getText().toString());
-
     }
 
     //will be used so the EditText answers can uncheck the radio after text changes

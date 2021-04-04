@@ -80,8 +80,7 @@
         android:layout_marginLeft="10dp"
         android:onClick="createQuiz"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/NextButton"
-        tools:layout_editor_absoluteY="479dp" />
+        app:layout_constraintBottom_toTopOf="@id/NextButton" />
 
     <Button
         android:id="@+id/editQuizButtonID"
@@ -91,17 +90,6 @@
         android:layout_marginRight="10dp"
         android:onClick="editQuiz"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/NextButton"
-        tools:layout_editor_absoluteY="479dp" />
-
-    <Button
-        android:id="@+id/testButtonID"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Test"
-        android:onClick="runTest"
-        app:layout_constraintLeft_toRightOf="@id/createQuizButtonID"
-        app:layout_constraintRight_toLeftOf="@id/editQuizButtonID"
         app:layout_constraintBottom_toTopOf="@id/NextButton" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

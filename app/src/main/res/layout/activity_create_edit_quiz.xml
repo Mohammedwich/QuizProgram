@@ -194,18 +194,6 @@
             android:text="Done"
             android:layout_margin="8dp"
             android:onClick="doneQuiz"
-            app:layout_constraintBottom_toTopOf="@id/createQuizTestBtnID"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            />
-
-        <Button
-            android:id="@+id/createQuizTestBtnID"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Test"
-            android:layout_margin="8dp"
-            android:onClick="runtest"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
