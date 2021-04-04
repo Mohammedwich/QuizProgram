@@ -76,7 +76,7 @@ public class MainActivity extends AppCompatActivity
     ArrayList<Quiz> listOfOnlineQuizzes = new ArrayList<Quiz>();
     ArrayList<String> onlineQuizTitles = new ArrayList<String>();
 
-    int oldSelectedOnlineQuizPosition = -1; //will be used to notify adapter of change
+    int oldSelectedOnlineQuizPosition = -1; //will be used to notify adapter of change. Can also be used as the last clicked position, make sure not -1
     View oldSelectedOnlineQuizView = null; //will be used to un-highlight a previously selected quiz.
 
     @Override
@@ -421,40 +421,58 @@ public class MainActivity extends AppCompatActivity
     {
         String theName = playerNameEditText.getText().toString();
 
-        //TODO: enable this line later
-        //if(theName.equalsIgnoreCase("professor") == true && selectedQuiz.equals("") == false)
-        if(selectedQuiz.equals("") == false)
+        if (currentlySelectedRadioButton == localRadioButton)
         {
-            Quiz quizToLoad = new Quiz();
-
-            //Take the correct quiz to pass to intent
-            for (int currentQuiz = 0; currentQuiz < listOfLocalQuizzes.size(); currentQuiz++)
+            //TODO: enable this line later
+            //if(theName.equalsIgnoreCase("professor") == true && selectedQuiz.equals("") == false)
+            if(selectedQuiz.equals("") == false)
             {
-                if (selectedQuiz.equals(listOfLocalQuizzes.get(currentQuiz).getQuizTitle()))
+                Quiz quizToLoad = new Quiz();
+
+                //Take the correct quiz to pass to intent
+                for (int currentQuiz = 0; currentQuiz < listOfLocalQuizzes.size(); currentQuiz++)
                 {
-                    quizToLoad = listOfLocalQuizzes.get(currentQuiz);
+                    if (selectedQuiz.equals(listOfLocalQuizzes.get(currentQuiz).getQuizTitle()))
+                    {
+                        quizToLoad = listOfLocalQuizzes.get(currentQuiz);
+                    }
                 }
+
+                Intent intentObject = new Intent(this, CreateEditQuiz.class);
+                // put the quiz in the intent
+                intentObject.putExtra("chosenQuiz", quizToLoad);
+
+                //mode will be create or edit which affects CreateEditQuiz screen's behavior
+                intentObject.putExtra("mode", "edit");
+
+                //pass the quiz's quiz file so it can be overwritten with the edited quiz
+                intentObject.putExtra("fileNamePath", arrayOfQuizFiles[oldSelectedQuizPosition].toString());
+
+                startActivity(intentObject);
             }
-
-            Intent intentObject = new Intent(this, CreateEditQuiz.class);
-            // put the quiz in the intent
-            intentObject.putExtra("chosenQuiz", quizToLoad);
-
-            //mode will be create or edit which affects CreateEditQuiz screen's behavior
-            intentObject.putExtra("mode", "edit");
-
-            startActivity(intentObject);
+            else
+            {
+                System.out.println("Name is not professor or no quiz selected and this button should be hidden");
+                Toast.makeText(MainActivity.this, "No quiz selected", Toast.LENGTH_LONG).show();
+            }
         }
-        else
-        {
-            System.out.println("Name is not professor or no quiz selected and this button should be hidden");
+        else {
+            Toast.makeText(MainActivity.this, "Cannot edit quiz in online mode", Toast.LENGTH_LONG).show();
         }
     }
 
     //TODO: debug code. Remove later
     public void runTest(View view)
     {
-        System.out.println("selected quiz is: " + selectedQuiz);
+        System.out.println("Filedir: " + theFileDir);
+        if (oldSelectedQuizPosition >= 0)
+        {
+            System.out.println("file array: " + arrayOfQuizFiles[oldSelectedQuizPosition]);
+        }
+        else {
+            System.out.println("invalid index");
+        }
+        System.out.println("selected quiz: " + selectedQuiz);
     }
 
     public void radioClick(View view)

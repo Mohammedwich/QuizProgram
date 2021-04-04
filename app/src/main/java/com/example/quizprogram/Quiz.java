@@ -11,6 +11,9 @@ The app also supports fetching quizzes from a website and taking them instead of
 
 package com.example.quizprogram;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 
@@ -204,6 +207,58 @@ public class Quiz implements Serializable
     public void deleteAllQuestions()
     {
         listOfQuestions.clear();
+    }
+
+    /** This method overwrites the given file*/
+    public void writeToFile(File theFile) throws IOException
+    {
+        FileWriter writer = new FileWriter(theFile, false);
+
+        writer.append(quizTitle + "\n");
+
+        for(int currentQuestion = 0; currentQuestion < listOfQuestions.size(); currentQuestion++)
+        {
+            Question theCurrentQuestion = listOfQuestions.get(currentQuestion);
+            String theRightAnswer = theCurrentQuestion.correctChoice;
+
+            //write the question
+            writer.append(theCurrentQuestion.theQuestion + "\n");
+
+            //write choice 1
+            if(theCurrentQuestion.choice1.equals(theRightAnswer) == true) {
+                writer.append("*" + theCurrentQuestion.choice1 + "\n");
+            }
+            else {
+                writer.append(theCurrentQuestion.choice1 + "\n");
+            }
+
+            //write choice 2
+            if(theCurrentQuestion.choice2.equals(theRightAnswer) == true) {
+                writer.append("*" + theCurrentQuestion.choice2 + "\n");
+            }
+            else {
+                writer.append(theCurrentQuestion.choice2 + "\n");
+            }
+
+            //write choice 3
+            if(theCurrentQuestion.choice3.equals(theRightAnswer) == true) {
+                writer.append("*" + theCurrentQuestion.choice3 + "\n");
+            }
+            else {
+                writer.append(theCurrentQuestion.choice3 + "\n");
+            }
+
+            //write choice 4
+            if(theCurrentQuestion.choice4.equals(theRightAnswer) == true) {
+                writer.append("*" + theCurrentQuestion.choice4 + "\n");
+            }
+            else {
+                writer.append(theCurrentQuestion.choice4 + "\n");
+            }
+        } //end of for loop
+
+        writer.close();
+        System.out.println("Finished writing quiz to file");
     }
 
     @Override

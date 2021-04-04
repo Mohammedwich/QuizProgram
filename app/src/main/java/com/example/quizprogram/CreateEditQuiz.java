@@ -14,6 +14,8 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.File;
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 
@@ -41,6 +43,9 @@ public class CreateEditQuiz extends AppCompatActivity
     ArrayList<String[]> listOfQuestions = new ArrayList<>(5);
     //Will be given to an adapter so it can display them in a recyclerView
     ArrayList<String> listOfQuestionTitles = new ArrayList<>(5);
+
+    File theFileDir; //will write new quizzes to a file in this directory if we are in create mode
+    String theFileToEditPath; //will overwrite this file if we are in edit mode
 
     RecyclerView questionTitlesRecyclerView;
     //While the adapter was made for quiz topics initially, it can work to display any arraylist of strings
@@ -76,6 +81,8 @@ public class CreateEditQuiz extends AppCompatActivity
         answer4Radio = findViewById(R.id.createQuizAns4RadioID);
         answer4Text = findViewById(R.id.createQuizAns4TextID);
 
+        theFileDir = getFilesDir();
+
         Intent theIntent = getIntent();
         mode = theIntent.getStringExtra("mode");
 
@@ -96,6 +103,8 @@ public class CreateEditQuiz extends AppCompatActivity
         //initializations if edit mode
         if(mode.equalsIgnoreCase("edit") == true)
         {
+            theFileToEditPath = theIntent.getStringExtra("fileNamePath");
+
             serializedQuiz = theIntent.getSerializableExtra("chosenQuiz");
             selectedQuiz = (Quiz) serializedQuiz;
 
@@ -224,11 +233,18 @@ public class CreateEditQuiz extends AppCompatActivity
             String [] theNewQuestion = {theQuestion, theAnswer1, theAnswer2, theAnswer3, theAnswer4, theCorrectAnswer};
 
             //make sure no field is blank before adding question to quiz object
-            if(theQuestion.equals("") || theAnswer1.equals("") || theAnswer2.equals("")
+            if(quizTitleField.getText().toString().equals("")
+                    || theQuestion.equals("") || theAnswer1.equals("") || theAnswer2.equals("")
                     || theAnswer3.equals("") || theAnswer4.equals("") || theCorrectAnswer.equals(""))
             {
                 //Tell user they can't have empty fields
-                Toast.makeText(CreateEditQuiz.this, "Question, answers, and correct answer must be set", Toast.LENGTH_LONG).show();
+                Toast.makeText(CreateEditQuiz.this, "Title, Question, answers, and correct answer must be set", Toast.LENGTH_LONG).show();
+            }
+            //make sure file name is valid
+            else if(theFileToEditPath.startsWith("Quiz") == false)
+            {
+                //Tell user they need a valid file name
+                Toast.makeText(CreateEditQuiz.this, "File name must begin with \"Quiz\"", Toast.LENGTH_LONG).show();
             }
             else {
                 listOfQuestions.add(theNewQuestion);
@@ -308,26 +324,59 @@ public class CreateEditQuiz extends AppCompatActivity
         clearFields();
     }
 
+
     public void saveQuizToFile()
     {
+        //new quiz object should be created and filled with data if this function is called so just write it to file
+
+        //The newQuizObject should maintain its state since it does not get re-initialized to
+        // nothing since the screen is not reset at any point, so we can overwrite this new file
+        // with everything in the newQuizObject including the newly added question every time save
+        // is clicked with valid info and quizFileName is not changed
+
         //create new file here using the provided file name. Can overwrite it when updating its quiz
         if(mode.equalsIgnoreCase("create") == true)
         {
+            File newFile = new File(quizFileNameField.getText().toString());
 
+            try
+            {
+                newQuizObject.writeToFile(newFile);
+            } catch (IOException e)
+            {
+                e.printStackTrace();
+                System.out.println("Failed to write the newly created quiz to a file");
+            }
         }
 
         //do not use provided file name if accessible. Overwrite quiz in the chosen quiz's file with modified quiz.
         if(mode.equalsIgnoreCase("edit") == true)
         {
+            File theChosenQuizsFile = new File(theFileToEditPath);
 
+            try
+            {
+                newQuizObject.writeToFile(theChosenQuizsFile);
+            } catch (IOException e)
+            {
+                e.printStackTrace();
+                System.out.println("Failed to write the edited quiz's file");
+            }
         }
     }
 
     public void doneQuiz(View view)
     {
+        //stack cleared, all valid changes should have been saved, re-create the
+        // main screen so it gets updated and go to it
+        Intent intent = new Intent(this, MainActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP); //clears the stack of all the loaded activities
+        startActivity(intent);
     }
 
     public void runtest(View view)
     {
+        System.out.println("editFile path: " + theFileToEditPath);
+        System.out.println("file dir: " + theFileDir);
     }
 }
