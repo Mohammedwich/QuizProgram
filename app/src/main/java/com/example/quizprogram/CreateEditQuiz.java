@@ -83,9 +83,6 @@ public class CreateEditQuiz extends AppCompatActivity
         answer4Radio = findViewById(R.id.createQuizAns4RadioID);
         answer4Text = findViewById(R.id.createQuizAns4TextID);
 
-        //If user edits the question, the one they had highlighted will unhighlight
-        questionField.addTextChangedListener(new QuestionTitleTextWatcher());
-
         //This is so the watcher can clear selected radios if text is edited so they must select again
         answer1Text.addTextChangedListener(new AnswerTextWatcher());
         answer2Text.addTextChangedListener(new AnswerTextWatcher());
@@ -137,6 +134,18 @@ public class CreateEditQuiz extends AppCompatActivity
             questionField.setHint("Select a question below");
         }
 
+    }
+
+    // When the question is changed, it counts as a new question and will allow user to add question
+    // since it is a new question, this one user had clicked will be unhighlighted assuming user will
+    // change the question title's text. If they do not, it still counts as the same question.
+    public void questionTitleTouched(View view)
+    {
+        if(oldSelectedQuestionView != null)
+        {
+            oldSelectedQuestionView.setBackgroundColor(Color.parseColor("#ffffff"));
+            questionTitlesAdapter.notifyItemChanged(oldSelectedQuestionPosition);
+        }
     }
 
     public void selectQuestion(View view, int clickedItemPosition)
@@ -364,14 +373,18 @@ public class CreateEditQuiz extends AppCompatActivity
         System.out.println("Question delete result is" + questionDeleteResult + "for: " + selectedQuestionTitle);
 
         //renew all data to account for the deletion
-        listOfQuestionTitles.clear();
-        fillListOfQuestionTitles();
-
         listOfQuestions.clear();
         listOfQuestions = newQuizObject.getListOfQuestions();
 
+        //renewing listOfQuestions must happen first otherwise the titles will be filled with the pre-deleted values
+        listOfQuestionTitles.clear();
+        fillListOfQuestionTitles();
+
         questionTitlesAdapter.notifyItemRemoved(deletedQuestionPosition);
         questionTitlesAdapter.notifyItemRangeChanged(deletedQuestionPosition, listOfQuestionTitles.size());
+
+        //write the modified quiz to file
+        saveQuizToFile();
 
         //reset invalidated things caused by delete
         resetSelectedTrackers();
@@ -394,6 +407,7 @@ public class CreateEditQuiz extends AppCompatActivity
         if(oldSelectedQuestionView != null)
         {
             oldSelectedQuestionView.setBackgroundColor(Color.parseColor("#ffffff"));
+            questionTitlesAdapter.notifyItemChanged(oldSelectedQuestionPosition);
         }
 
         clearFields();
@@ -490,32 +504,6 @@ public class CreateEditQuiz extends AppCompatActivity
         public void afterTextChanged(Editable s)
         {
             clearCheckAllAnswerRadios();
-        }
-    }
-
-    //This one is for the question title field. If changed, it is a new question so we want the
-    // highlighted question to become unhighlighted so user sees they are not working on it anymore
-    private class QuestionTitleTextWatcher implements TextWatcher
-    {
-        @Override
-        public void beforeTextChanged(CharSequence s, int start, int count, int after)
-        {
-
-        }
-
-        @Override
-        public void onTextChanged(CharSequence s, int start, int before, int count)
-        {
-
-        }
-
-        @Override
-        public void afterTextChanged(Editable s)
-        {
-            if(oldSelectedQuestionView != null)
-            {
-                oldSelectedQuestionView.setBackgroundColor(Color.parseColor("#ffffff"));
-            }
         }
     }
 }
