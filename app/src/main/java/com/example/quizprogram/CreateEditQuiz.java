@@ -58,9 +58,14 @@ public class CreateEditQuiz extends AppCompatActivity
     View oldSelectedQuestionView = null; //will be used to un-highlight a previously selected quiz.
     String selectedQuestionTitle = "";
     int currentSelectedQuestionPosition = -1; //this var might be useful for overwriting a question
-
     String currentlyMarkedCorrectAnswerString = "";
 
+    //will be set to true when user creates a new quiz file and remains on the creation screen.
+    // It will prevent them from changing the file name which may cause created questions to remain
+    // on screen while writing new questions to a different new file
+    boolean currentlyCreatingNewQuiz = false;
+
+    String lockedCreationPath = ""; //This will hold the path while currentlyCreatingNewQuiz is true
 
 
     @Override
@@ -261,6 +266,7 @@ public class CreateEditQuiz extends AppCompatActivity
         //if in create mode
         if(mode.equalsIgnoreCase("create") == true)
         {
+            String quizTitle = quizTitleField.getText().toString();
             String theQuestion = questionField.getText().toString();
             String theAnswer1 = answer1Text.getText().toString();
             String theAnswer2 = answer2Text.getText().toString();
@@ -293,20 +299,22 @@ public class CreateEditQuiz extends AppCompatActivity
                 Toast.makeText(CreateEditQuiz.this, "check one of the radio buttons", Toast.LENGTH_LONG).show();
             }
             else {
-                //Adjusting an existing question
-                if(theQuestion.equals(listOfQuestionTitles.get(currentSelectedQuestionPosition)) == true)
+                //Adjusting an existing question.
+                if(theQuestion.equals(selectedQuestionTitle) == true)
                 {
                     listOfQuestions.set(currentSelectedQuestionPosition, theNewQuestionObject);
                     listOfQuestionTitles.set(currentSelectedQuestionPosition, theQuestion);
+                    newQuizObject.setQuizTitle(quizTitle);
                     newQuizObject.setQuestion(currentSelectedQuestionPosition, theQuestion, theAnswer1, theAnswer2, theAnswer3, theAnswer4, theCorrectAnswer);
 
                     questionTitlesAdapter.notifyItemChanged(currentSelectedQuestionPosition);
                 }
                 //making a new question
-                else if (theQuestion.equals(listOfQuestionTitles.get(currentSelectedQuestionPosition)) == false)
+                else if (theQuestion.equals(selectedQuestionTitle) == false)
                 {
                     listOfQuestions.add(theNewQuestionObject);
                     listOfQuestionTitles.add(theQuestion);
+                    newQuizObject.setQuizTitle(quizTitle);
                     newQuizObject.addQuestion(theQuestion, theAnswer1, theAnswer2, theAnswer3, theAnswer4, theCorrectAnswer);
 
                     //size of titles minus 1 is the index of the newly added item
@@ -352,7 +360,7 @@ public class CreateEditQuiz extends AppCompatActivity
                 //check if user is adjusting the same question(same question title) or if they are adding a new question (different question title)
 
                 //Adjusting an existing question
-                if(theQuestion.equals(listOfQuestionTitles.get(currentSelectedQuestionPosition)) == true)
+                if(theQuestion.equals(selectedQuestionTitle) == true)
                 {
                     listOfQuestions.set(currentSelectedQuestionPosition, theNewQuestionObject);
                     listOfQuestionTitles.set(currentSelectedQuestionPosition, theQuestion);
@@ -361,7 +369,7 @@ public class CreateEditQuiz extends AppCompatActivity
                     questionTitlesAdapter.notifyItemChanged(currentSelectedQuestionPosition);
                 }
                 //making a new question
-                else if (theQuestion.equals(listOfQuestionTitles.get(currentSelectedQuestionPosition)) == false)
+                else if (theQuestion.equals(selectedQuestionTitle) == false)
                 {
                     listOfQuestions.add(theNewQuestionObject);
                     listOfQuestionTitles.add(theQuestion);
@@ -453,7 +461,21 @@ public class CreateEditQuiz extends AppCompatActivity
         //create new file here using the provided file name. Can overwrite it when updating its quiz
         if(mode.equalsIgnoreCase("create") == true)
         {
-            String newFileFullPath = theFileDir + "/" + quizFileNameField.getText().toString();
+            String newFileFullPath = "";
+
+            if(currentlyCreatingNewQuiz == false)
+            {
+                newFileFullPath = theFileDir + "/" + quizFileNameField.getText().toString();
+                lockedCreationPath = newFileFullPath;
+
+                //When user clicks Done button, this is made false again.
+                currentlyCreatingNewQuiz = true;
+            }
+
+            if(currentlyCreatingNewQuiz == true)
+            {
+                newFileFullPath = lockedCreationPath;
+            }
 
             File newFile = new File(newFileFullPath);
             try
@@ -493,6 +515,10 @@ public class CreateEditQuiz extends AppCompatActivity
 
     public void doneQuiz(View view)
     {
+        //set it false again in case user can somehow go back to the creation screen without
+        // reloading it from scratch and being denied the ability to create a file
+        currentlyCreatingNewQuiz = false;
+
         //stack cleared, all valid changes should have been saved, re-create the
         // main screen so it gets updated and go to it
         Intent intent = new Intent(this, MainActivity.class);
