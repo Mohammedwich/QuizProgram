@@ -83,6 +83,9 @@ public class CreateEditQuiz extends AppCompatActivity
         answer4Radio = findViewById(R.id.createQuizAns4RadioID);
         answer4Text = findViewById(R.id.createQuizAns4TextID);
 
+        //If user edits the question, the one they had highlighted will unhighlight
+        questionField.addTextChangedListener(new QuestionTitleTextWatcher());
+
         //This is so the watcher can clear selected radios if text is edited so they must select again
         answer1Text.addTextChangedListener(new AnswerTextWatcher());
         answer2Text.addTextChangedListener(new AnswerTextWatcher());
@@ -306,15 +309,51 @@ public class CreateEditQuiz extends AppCompatActivity
 
             String [] theNewQuestionObject = {theQuestion, theAnswer1, theAnswer2, theAnswer3, theAnswer4, theCorrectAnswer};
 
-            listOfQuestions.set(currentSelectedQuestionPosition, theNewQuestionObject);
-            listOfQuestionTitles.set(currentSelectedQuestionPosition, theQuestion);
-            newQuizObject.setQuestion(currentSelectedQuestionPosition, theQuestion, theAnswer1, theAnswer2, theAnswer3, theAnswer4, theCorrectAnswer);
+            //make sure no field is blank before adding question to quiz object
+            if(theQuestion.equals("") || theAnswer1.equals("") || theAnswer2.equals("")
+                    || theAnswer3.equals("") || theAnswer4.equals("") || theCorrectAnswer.equals(""))
+            {
+                //Tell user they can't have empty fields
+                Toast.makeText(CreateEditQuiz.this, "Question, answers, and correct answer must be set", Toast.LENGTH_LONG).show();
+            }
+            //make sure an answer's radio is marked
+            else if(answer1Radio.isChecked() == false && answer2Radio.isChecked() == false
+                    && answer3Radio.isChecked() == false &&answer4Radio.isChecked() == false)
+            {
+                //Tell user they need to check a radio button
+                Toast.makeText(CreateEditQuiz.this, "check one of the radio buttons", Toast.LENGTH_LONG).show();
+            }
+            else
+            {
+                //check if user is adjusting the same question(same question title) or if they are adding a new question (different question title)
 
-            questionTitlesAdapter.notifyItemChanged(currentSelectedQuestionPosition);
+                //Adjusting an existing question
+                if(theQuestion.equals(listOfQuestionTitles.get(currentSelectedQuestionPosition)) == true)
+                {
+                    listOfQuestions.set(currentSelectedQuestionPosition, theNewQuestionObject);
+                    listOfQuestionTitles.set(currentSelectedQuestionPosition, theQuestion);
+                    newQuizObject.setQuestion(currentSelectedQuestionPosition, theQuestion, theAnswer1, theAnswer2, theAnswer3, theAnswer4, theCorrectAnswer);
 
-            saveQuizToFile();
-            clearFields();
-        }
+                    questionTitlesAdapter.notifyItemChanged(currentSelectedQuestionPosition);
+                }
+                //making a new question
+                else if (theQuestion.equals(listOfQuestionTitles.get(currentSelectedQuestionPosition)) == false)
+                {
+                    listOfQuestions.add(theNewQuestionObject);
+                    listOfQuestionTitles.add(theQuestion);
+                    newQuizObject.addQuestion(theQuestion, theAnswer1, theAnswer2, theAnswer3, theAnswer4, theCorrectAnswer);
+
+                    //size of titles minus 1 is the index of the newly added item
+                    questionTitlesAdapter.notifyItemChanged(listOfQuestionTitles.size() - 1);
+                }
+                else {
+                    System.out.println("Error: saveQuiz() edit mode failed to adjust or add a question");
+                }
+
+                saveQuizToFile();
+                clearFields();
+            } //end of edit mode field validation
+        }//end of edit mode action code block
     }
 
     public void deleteQuestion(View view)
@@ -352,7 +391,11 @@ public class CreateEditQuiz extends AppCompatActivity
 
     public void clearQuiz(View view)
     {
-        oldSelectedQuestionView.setBackgroundColor(Color.parseColor("#ffffff"));
+        if(oldSelectedQuestionView != null)
+        {
+            oldSelectedQuestionView.setBackgroundColor(Color.parseColor("#ffffff"));
+        }
+
         clearFields();
         resetSelectedTrackers();
     }
@@ -360,12 +403,12 @@ public class CreateEditQuiz extends AppCompatActivity
     //will be used when we clear the screen so weird stuff doesn't happen because adapter updates so nothing looks selected but in reality stuff is selected
     public void resetSelectedTrackers()
     {
-        int oldSelectedQuestionPosition = -1;
-        View oldSelectedQuestionView = null;
-        String selectedQuestionTitle = "";
-        int currentSelectedQuestionPosition = -1;
+        oldSelectedQuestionPosition = -1;
+        oldSelectedQuestionView = null;
+        selectedQuestionTitle = "";
+        currentSelectedQuestionPosition = -1;
 
-        String currentlyMarkedCorrectAnswerString = "";
+        currentlyMarkedCorrectAnswerString = "";
     }
 
     public void saveQuizToFile()
@@ -431,7 +474,6 @@ public class CreateEditQuiz extends AppCompatActivity
     // when clicked and the new string will not match. Unselecting radios makes user select again after edit
     private class AnswerTextWatcher implements TextWatcher
     {
-
         @Override
         public void beforeTextChanged(CharSequence s, int start, int count, int after)
         {
@@ -448,6 +490,32 @@ public class CreateEditQuiz extends AppCompatActivity
         public void afterTextChanged(Editable s)
         {
             clearCheckAllAnswerRadios();
+        }
+    }
+
+    //This one is for the question title field. If changed, it is a new question so we want the
+    // highlighted question to become unhighlighted so user sees they are not working on it anymore
+    private class QuestionTitleTextWatcher implements TextWatcher
+    {
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after)
+        {
+
+        }
+
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count)
+        {
+
+        }
+
+        @Override
+        public void afterTextChanged(Editable s)
+        {
+            if(oldSelectedQuestionView != null)
+            {
+                oldSelectedQuestionView.setBackgroundColor(Color.parseColor("#ffffff"));
+            }
         }
     }
 }
