@@ -285,11 +285,10 @@ public class CreateEditQuiz extends AppCompatActivity
                 Toast.makeText(CreateEditQuiz.this, "Title, Question, answers, and correct answer must be set", Toast.LENGTH_LONG).show();
             }
             //make sure file name is valid
-            else if(quizFileNameField.getText().toString().startsWith("Quiz") == false
-                        || quizFileNameField.getText().toString().endsWith(".txt") == false)
+            else if(quizFileNameField.getText().toString().startsWith("Quiz") == false)
             {
                 //Tell user they need a valid file name
-                Toast.makeText(CreateEditQuiz.this, "File name must begin with \"Quiz\" and end with \".txt\"", Toast.LENGTH_LONG).show();
+                Toast.makeText(CreateEditQuiz.this, "File name must begin with \"Quiz\"", Toast.LENGTH_LONG).show();
             }
             //make sure an answer's radio is marked
             else if(answer1Radio.isChecked() == false && answer2Radio.isChecked() == false
@@ -465,7 +464,7 @@ public class CreateEditQuiz extends AppCompatActivity
 
             if(currentlyCreatingNewQuiz == false)
             {
-                newFileFullPath = theFileDir + "/" + quizFileNameField.getText().toString();
+                newFileFullPath = theFileDir + "/" + quizFileNameField.getText().toString() + ".txt";
                 lockedCreationPath = newFileFullPath;
 
                 //When user clicks Done button, this is made false again.
