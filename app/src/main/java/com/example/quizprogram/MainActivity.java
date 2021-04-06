@@ -1,12 +1,13 @@
 /*Written by Mohammed Ahmed, msa190000
-For CS4301.002, assignment 3, started Mar 6 2021.
+For CS4301.002, assignment 4, started Apr 1 2021.
 Description:
 The app will load up some quizzes out of text files and then offer the choices to the user in a
 RecyclerView. They enter their name and pick a quiz and click next and take the quiz on the next
 screen. Select an answer and click the answer button which will display the result. Click the
 button again to load the next question. When done they are greeted and told their result on a
 third screen. From the third screen they can return to the first.
-The app also supports fetching quizzes from a website and taking them instead of local quizzes
+The app also supports fetching quizzes from a website and taking them instead of local quizzes.
+It also allows the creation and editing of local quizzes by setting the player name to "professor".
 */
 
 package com.example.quizprogram;

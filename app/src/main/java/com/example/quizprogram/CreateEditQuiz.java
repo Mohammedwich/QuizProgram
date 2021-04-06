@@ -1,3 +1,15 @@
+/*Written by Mohammed Ahmed, msa190000
+For CS4301.002, assignment 4, started Apr 1 2021.
+Description:
+The app will load up some quizzes out of text files and then offer the choices to the user in a
+RecyclerView. They enter their name and pick a quiz and click next and take the quiz on the next
+screen. Select an answer and click the answer button which will display the result. Click the
+button again to load the next question. When done they are greeted and told their result on a
+third screen. From the third screen they can return to the first.
+The app also supports fetching quizzes from a website and taking them instead of local quizzes.
+It also allows the creation and editing of local quizzes by setting the player name to "professor".
+*/
+
 package com.example.quizprogram;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -87,6 +99,8 @@ public class CreateEditQuiz extends AppCompatActivity
         answer3Text = findViewById(R.id.createQuizAns3TextID);
         answer4Radio = findViewById(R.id.createQuizAns4RadioID);
         answer4Text = findViewById(R.id.createQuizAns4TextID);
+
+        questionField.setOnFocusChangeListener(new QuestionTitleFocusListener());
 
         //This is so the watcher can clear selected radios if text is edited so they must select again
         answer1Text.addTextChangedListener(new AnswerTextWatcher());
@@ -545,6 +559,23 @@ public class CreateEditQuiz extends AppCompatActivity
         public void afterTextChanged(Editable s)
         {
             clearCheckAllAnswerRadios();
+        }
+    }
+
+    private class QuestionTitleFocusListener implements View.OnFocusChangeListener
+    {
+
+        @Override
+        public void onFocusChange(View v, boolean hasFocus)
+        {
+            if(hasFocus == true)
+            {
+                if(oldSelectedQuestionView != null)
+                {
+                    oldSelectedQuestionView.setBackgroundColor(Color.parseColor("#ffffff"));
+                    questionTitlesAdapter.notifyItemChanged(oldSelectedQuestionPosition);
+                }
+            }
         }
     }
 }
